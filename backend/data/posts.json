@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "Welcome to E-Learning",
+    "excerpt": "An introduction to the platform, what to expect and how to get started.",
+    "content": "<p>Welcome to our E-Learning platform! This first post explains how to sign up, pick a course, and use the learning tools.</p><p>Features include video lessons, quizzes, assignments, and instructor support.</p>",
+    "author": "Platform Team",
+    "tags": ["welcome", "getting-started"],
+    "image": null,
+    "createdAt": "2025-11-01T09:00:00.000Z",
+    "updatedAt": "2025-11-01T09:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Study Tips for Online Learners",
+    "excerpt": "Practical tips to stay focused and get the most out of your online courses.",
+    "content": "<p>Studying online requires discipline. Set a schedule, create a quiet workspace, and take regular breaks. Use the discussion features to ask questions — instructors love engaged students.</p>",
+    "author": "Jane Doe",
+    "tags": ["study-tips", "productivity"],
+    "image": null,
+    "createdAt": "2025-11-10T12:00:00.000Z",
+    "updatedAt": "2025-11-10T12:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "title": "New Course: Web Development Basics",
+    "excerpt": "We launched a new beginner-friendly course covering HTML, CSS and JavaScript fundamentals.",
+    "content": "<p>This course is perfect for beginners. It includes hands-on exercises, quizzes, and a final project to build a small website.</p>",
+    "author": "Course Team",
+    "tags": ["course", "web", "javascript"],
+    "image": null,
+    "createdAt": "2025-11-15T08:30:00.000Z",
+    "updatedAt": "2025-11-15T08:30:00.000Z"
+  }
+]

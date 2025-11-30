@@ -1,0 +1,224 @@
+/* CTC.css - Premium Aesthetic Style */
+
+.ctc-section {
+  padding: 5rem 1.5rem;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Soft ambient background gradients */
+.ctc-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.15) 0%, transparent 70%);
+  z-index: 0;
+  opacity: 0.7;
+  animation: float 20s infinite ease-in-out alternate;
+}
+
+.ctc-section::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  z-index: 0;
+  opacity: 0.6;
+  animation: float 18s infinite ease-in alternate-reverse;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(20px, -20px) scale(1.1);
+  }
+}
+
+.ctc-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .ctc-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 4rem;
+  }
+}
+
+/* Image Wrapper with Floating Effect */
+.ctc-image-wrapper {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.ctc-image {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 1.25rem;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  object-fit: cover;
+}
+
+.ctc-image:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 
+    0 35px 60px -15px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(20, 184, 166, 0.15);
+}
+
+/* Content Card with Glassmorphism Touch */
+.ctc-content {
+  flex: 1;
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: white;
+  backdrop-filter: blur(10px);
+  border-radius: 1.25rem;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    0 1px 5px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  max-width: 520px;
+  margin: 0 auto;
+  transition: all 0.4s ease;
+}
+
+@media (min-width: 768px) {
+  .ctc-content {
+    text-align: left;
+    align-items: flex-start;
+    margin: 0;
+  }
+}
+
+/* Title with Gradient Accent */
+.ctc-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  position: relative;
+  display: inline-block;
+}
+
+.ctc-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 50px;
+  height: 4px;
+  background: linear-gradient(90deg, #14b8a6, #3b82f6);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s ease;
+}
+
+.ctc-content:hover .ctc-title::after {
+  transform: scaleX(1);
+}
+
+/* Paragraph Styling */
+.ctc-paragraph {
+  font-size: 1.0625rem;
+  color: #475569;
+  line-height: 1.75;
+  margin: 0;
+  opacity: 0.95;
+  max-width: none;
+}
+
+/* Button with Premium Shine */
+.ctc-button {
+  padding: 0.875rem 2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(90deg, #14b8a6, #0d9488, #3b82f6);
+  background-size: 200% auto;
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 
+    0 8px 20px rgba(20, 184, 166, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.4s ease;
+  min-width: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctc-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+.ctc-button:hover::before {
+  left: 100%;
+}
+
+.ctc-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 12px 25px rgba(20, 184, 166, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background-position: right center;
+}
+
+.ctc-button:active {
+  transform: translateY(0) scale(1);
+}
+
+.ctc-button:focus {
+  outline: none;
+}
+
+.ctc-badge {
+  font-size: 0.875rem;
+  color: #0d9488;
+  background: rgba(13, 148, 136, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  font-weight: 500;
+  align-self: flex-start;
+  margin-bottom: -0.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
