@@ -29,3 +29,24 @@ exports.gradeTeacherSubmission = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+exports.deleteTeacherSubmission = async (req, res) => {
+  const { submissionId } = req.params;
+
+  try {
+    const [result] = await db.query(
+      'DELETE FROM submissions WHERE id = ?',
+      [submissionId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Submission not found' });
+    }
+
+    res.json({ message: 'Submission deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+};

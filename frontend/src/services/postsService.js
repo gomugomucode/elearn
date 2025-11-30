@@ -2,7 +2,9 @@
 // Uses the backend endpoints at /api/posts.
 // Adjust BASE_URL if your API is hosted elsewhere.
 
-const BASE_URL = '/api/posts';
+// postsService.js
+const BASE_URL = 'http://localhost:5000/api/posts'; // <- full backend URL
+
 
 async function handleResponse(res) {
   const contentType = res.headers.get('content-type') || '';

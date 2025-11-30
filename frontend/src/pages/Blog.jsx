@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../App.css';
 import { fetchPosts, fetchPostById } from '../services/postsService';
 
 export default function Blog() {
@@ -11,7 +10,6 @@ export default function Blog() {
   const [error, setError] = useState('');
   const [selectedPost, setSelectedPost] = useState(null);
 
-  // Load posts list
   useEffect(() => {
     let mounted = true;
     setLoading(true);
@@ -28,12 +26,10 @@ export default function Blog() {
         setPosts([]);
       })
       .finally(() => mounted && setLoading(false));
-    return () => {
-      mounted = false;
-    };
+
+    return () => { mounted = false; };
   }, [page, limit]);
 
-  // Example: fetch and show single post details
   const openPost = async (id) => {
     setSelectedPost({ loading: true });
     try {
@@ -46,54 +42,86 @@ export default function Blog() {
   };
 
   const closePost = () => setSelectedPost(null);
-
   const totalPages = Math.max(1, Math.ceil((total || posts.length) / limit));
 
   return (
-    <main className="page-container">
-      <h1>Blog</h1>
+    <main className="pt-24 bg-gray-50 min-h-screen">
+      <div className="container mx-auto px-6 lg:px-20 py-12">
+        <h1 className="text-4xl font-bold text-gray-800 mb-8">Tech Blog</h1>
 
-      {loading && <p>Loading posts…</p>}
-      {error && <p className="error">{error}</p>}
+        {loading && <p className="text-gray-600">Loading posts…</p>}
+        {error && <p className="text-red-600">{error}</p>}
+        {!loading && posts.length === 0 && <p className="text-gray-600">No posts found.</p>}
 
-      {!loading && posts.length === 0 && <p>No posts found.</p>}
-
-      <section className="posts-grid">
-        {posts.map((post) => (
-          <article className="post-card" key={post.id}>
-            <h2 className="post-title">{post.title}</h2>
-            <time className="post-date">{new Date(post.createdAt || post.date || '').toLocaleDateString()}</time>
-            <p className="post-excerpt" dangerouslySetInnerHTML={{ __html: post.excerpt || (post.content && post.content.slice(0, 140)) }} />
-            <div className="post-actions">
-              <button onClick={() => openPost(post.id)}>Read</button>
-              <a href={`/posts/${post.id}`}>Permalink</a>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post) => (
+            <div key={post.id} className="bg-white rounded-lg shadow hover:shadow-lg transition p-6 flex flex-col justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">{post.title}</h2>
+                <time className="text-gray-400 text-sm mb-3 block">
+                  {new Date(post.createdAt || post.date || '').toLocaleDateString()}
+                </time>
+                <p className="text-gray-600 mb-4">{post.excerpt || (post.content && post.content.slice(0, 120) + '...')}</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={() => openPost(post.id)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                >
+                  Read More
+                </button>
+                <a
+                  href={`/posts/${post.id}`}
+                  className="text-blue-600 hover:underline text-sm"
+                >
+                  Permalink
+                </a>
+              </div>
             </div>
-          </article>
-        ))}
-      </section>
+          ))}
+        </div>
 
-      <footer className="pagination">
-        <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page <= 1}>Prev</button>
-        <span>Page {page} / {totalPages}</span>
-        <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages}>Next</button>
-      </footer>
+        {/* Pagination */}
+        <div className="mt-12 flex justify-center items-center gap-6">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page <= 1}
+            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <span className="font-medium">Page {page} of {totalPages}</span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page >= totalPages}
+            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      </div>
 
-      {/* Modal / drawer for single post preview */}
+      {/* Modal for single post */}
       {selectedPost && (
-        <div className="post-modal" role="dialog" aria-modal="true">
-          <div className="post-modal-content">
-            {selectedPost.loading && <p>Loading post…</p>}
-            {selectedPost.error && <p className="error">{selectedPost.error}</p>}
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-start pt-24 z-50 overflow-auto">
+          <div className="bg-white w-full max-w-3xl rounded-lg p-8 shadow-lg relative">
+            {selectedPost.loading && <p className="text-gray-600">Loading post…</p>}
+            {selectedPost.error && <p className="text-red-600">{selectedPost.error}</p>}
             {selectedPost.post && (
               <>
-                <h2>{selectedPost.post.title}</h2>
-                <p className="meta">
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">{selectedPost.post.title}</h2>
+                <p className="text-gray-500 mb-4">
                   By {selectedPost.post.author || 'Unknown'} · {new Date(selectedPost.post.createdAt || '').toLocaleString()}
                 </p>
-                <div className="post-body" dangerouslySetInnerHTML={{ __html: selectedPost.post.content }} />
+                <div className="prose max-w-full" dangerouslySetInnerHTML={{ __html: selectedPost.post.content }} />
               </>
             )}
-            <button onClick={closePost}>Close</button>
+            <button
+              onClick={closePost}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 font-bold text-xl"
+            >
+              &times;
+            </button>
           </div>
         </div>
       )}

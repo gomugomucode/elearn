@@ -33,7 +33,7 @@ const StudentCourses = () => {
             <div className="p-4">
               <h3 className="font-bold text-lg">{course.title}</h3>
               <p className="text-sm text-gray-600">by {course.instructor}</p>
-
+{/* 
               <div className="mt-3">
                 <div className="flex justify-between text-sm text-gray-500 mb-1">
                   <span>Progress</span>
@@ -46,7 +46,7 @@ const StudentCourses = () => {
                     style={{ width: `${course.progress}%` }}
                   ></div>
                 </div>
-              </div>
+              </div> */}
 
               <Link
                 to={`/student/course/${course.courseId}`}

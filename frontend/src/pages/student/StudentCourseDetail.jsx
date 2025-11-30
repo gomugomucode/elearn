@@ -31,7 +31,7 @@ export default function CourseDetail() {
         {course.assignments.map((a) => (
           <Link
             key={a.id}
-            to={`/student/assignment/${a.id}`}
+            to={`/student/assignments/${a.id}`}
             className="block p-3 bg-white shadow rounded mb-2"
           >
             {a.title}

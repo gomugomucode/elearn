@@ -31,5 +31,45 @@
     "image": null,
     "createdAt": "2025-11-15T08:30:00.000Z",
     "updatedAt": "2025-11-15T08:30:00.000Z"
+  },
+  {
+    "id": 4,
+    "title": "Understanding React 18 Concurrent Mode",
+    "author": "Jane Developer",
+    "createdAt": "2025-11-28T08:30:00Z",
+    "excerpt": "React 18 introduces concurrent features that allow smoother user experiences and better performance...",
+    "content": "<p>React 18 introduces <strong>Concurrent Mode</strong> that helps apps stay responsive during heavy rendering tasks...</p>"
+  },
+  {
+    "id": 5,
+    "title": "A Guide to Node.js Streams",
+    "author": "John Smith",
+    "createdAt": "2025-11-27T10:15:00Z",
+    "excerpt": "Node.js streams are a powerful way to handle large amounts of data efficiently...",
+    "content": "<p>Streams in Node.js allow you to process data piece by piece rather than loading everything into memory...</p>"
+  },
+  {
+    "id": 6,
+    "title": "Top 10 VSCode Extensions for Web Developers",
+    "author": "Alex Dev",
+    "createdAt": "2025-11-25T14:00:00Z",
+    "excerpt": "Boost your productivity with these must-have VSCode extensions for modern web development...",
+    "content": "<p>Here are the top 10 VSCode extensions that every web developer should consider installing...</p>"
+  },
+  {
+    "id": 7,
+    "title": "Introduction to TypeScript for JavaScript Developers",
+    "author": "Samantha Code",
+    "createdAt": "2025-11-24T09:45:00Z",
+    "excerpt": "TypeScript adds static typing to JavaScript, helping you catch errors early and improve code quality...",
+    "content": "<p>TypeScript is a superset of JavaScript that introduces static typing, interfaces, and advanced tooling support...</p>"
+  },
+  {
+    "id": 8,
+    "title": "CSS Grid vs Flexbox: When to Use Which",
+    "author": "Mark Style",
+    "createdAt": "2025-11-23T16:20:00Z",
+    "excerpt": "Both CSS Grid and Flexbox are powerful layout tools, but each has its strengths and ideal use cases...",
+    "content": "<p>Flexbox is perfect for 1-dimensional layouts, while Grid excels at 2-dimensional designs. Knowing when to use each is key...</p>"
   }
 ]

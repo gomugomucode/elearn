@@ -1,6 +1,5 @@
-// src/pages/teacher/Submissions.jsx
 import { useEffect, useState } from 'react';
-import { getTeacherSubmissions, gradeTeacherSubmission } from '../../services/api';
+import { getTeacherSubmissions, gradeTeacherSubmission, deleteTeacherSubmission } from '../../services/api';
 
 const TeacherSubmissions = () => {
   const [submissions, setSubmissions] = useState([]);
@@ -34,47 +33,82 @@ const TeacherSubmissions = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this submission?')) return;
+    try {
+      await deleteTeacherSubmission(id);
+      setSubmissions(submissions.filter(s => s.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete submission.');
+    }
+  };
+
+  const handleViewFile = (fileUrl) => {
+    // Assuming backend serves files at /uploads/<fileUrl>
+    window.open(`http://localhost:5000/uploads/${fileUrl}`, '_blank');
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Submissions</h1>
 
-     <div className="space-y-3">
-  {submissions.map((s, index) => {
-    // fallback key if s.id is missing
-    const key = s.id ?? `submission-${index}`;
+      <div className="space-y-3">
+        {submissions.map((s, index) => {
+          const key = s.id ?? `submission-${index}`;
+          return (
+            <div key={key} className="bg-white p-4 rounded shadow">
+              <h3 className="font-bold">{s.assignment_title}</h3>
+              <p className="text-xs text-gray-500">
+                Submitted: {new Date(s.submitted_at).toLocaleString()}
+              </p>
+              <p className={`mt-1 text-sm font-medium ${s.status === 'graded' ? 'text-green-600' : 'text-yellow-600'}`}>
+                Status: {s.status}
+              </p>
+              {/* <button
+                onClick={() => window.open(`http://localhost:5000/uploads/${s.file_url}`, '_blank')}
+                className="mt-2 px-3 py-1 bg-green-100 text-green-800 rounded text-sm"
+              >
+                View File
+              </button> */}
 
-    return (
-      <div key={key} className="bg-white p-4 rounded shadow">
-        <h3 className="font-bold">{s.assignment_title}</h3>
-        <p className="text-gray-600 text-sm">Student: {s.student_name}</p>
-        <p className="text-xs text-gray-500">
-          Submitted: {new Date(s.submitted_at).toLocaleString()}
-        </p>
-        <p
-          className={`mt-1 text-sm font-medium ${
-            s.status === 'graded' ? 'text-green-600' : 'text-yellow-600'
-          }`}
-        >
-          Status: {s.status}
-        </p>
-        {s.grade && <p className="text-sm mt-1">Grade: {s.grade}/100</p>}
-        {s.feedback && <p className="text-sm mt-1">Feedback: {s.feedback}</p>}
-        <button
-          onClick={() => {
-            setSelected(s);
-            setGrade(s.grade || '');
-            setFeedback(s.feedback || '');
-          }}
-          className="mt-2 px-3 py-1 bg-blue-100 text-blue-800 rounded text-sm"
-        >
-          {s.status === 'graded' ? 'Re-evaluate' : 'Evaluate'}
-        </button>
+              {s.grade && <p className="text-sm mt-1">Grade: {s.grade}/100</p>}
+              {s.feedback && <p className="text-sm mt-1">Feedback: {s.feedback}</p>}
+
+              <div className="mt-2 flex gap-2">
+                <button
+                  onClick={() => {
+                    setSelected(s);
+                    setGrade(s.grade || '');
+                    setFeedback(s.feedback || '');
+                  }}
+                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded text-sm"
+                >
+                  {s.status === 'graded' ? 'Re-evaluate' : 'Evaluate'}
+                </button>
+
+                {s.file_url && (
+                  <button
+                    onClick={() => handleViewFile(s.file_url)}
+                    className="px-3 py-1 bg-green-100 text-green-800 rounded text-sm"
+                  >
+                    View File
+                  </button>
+                )}
+
+                <button
+                  onClick={() => handleDelete(s.id)}
+                  className="px-3 py-1 bg-red-100 text-red-800 rounded text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
 
-su      {selected && (
+      {selected && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white p-6 rounded shadow max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">Evaluate Submission</h2>

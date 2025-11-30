@@ -309,6 +309,17 @@ export const gradeTeacherSubmission = async (id, data) => {
   return res.data;
 };
 
+export const deleteTeacherSubmission = async (id) => {
+  const res = await fetch(`${API_BASE}/teacher/submissions/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+
+  if (!res.ok) throw new Error('Failed to delete submission');
+  return true;
+};
+
+
 
 // // src/services/api.js
 
@@ -455,10 +466,8 @@ export const submitAssignment = async (assignmentId, file) => {
 
   const res = await api.post(
     `/student/assignments/${assignmentId}/submit`,
-    formData,
-    {
-      headers: { "Content-Type": "multipart/form-data" },
-    }
+    formData
+    // NO headers here! Axios will handle it
   );
 
   return res.data;
