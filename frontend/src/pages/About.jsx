@@ -16,7 +16,7 @@ export default function About() {
         </div>
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src="/src/assets/react.svg"
+            src="/src/assets/about.jpg"
             alt="Students learning together"
             className="rounded-lg shadow-lg w-full max-w-md object-cover"
           />
