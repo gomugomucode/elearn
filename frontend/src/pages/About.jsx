@@ -1,57 +1,125 @@
-import React from 'react';
+import React from "react";
+import image1 from "../assets/images.jpg";
+
 
 export default function About() {
   return (
-    <main className="pt-24 bg-gray-50 min-h-screen">
-      {/* Hero Section */}
-      <section className="container mx-auto px-6 lg:px-20 py-16 flex flex-col lg:flex-row items-center gap-12">
-        <div className="lg:w-1/2">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-6 text-gray-800">About Us</h1>
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">Our Mission</h2>
-          <p className="text-gray-600 leading-relaxed">
-            We create accessible, high-quality online learning experiences that help learners build skills,
-            gain confidence, and reach their goals. Our platform combines engaging content, hands-on exercises,
-            and supportive instructors.
+    <main className="max-w-7xl mx-auto px-6 py-12 min-h-screen">
+
+      {/* TOP HERO SECTION */}
+      <section className="flex flex-col md:flex-row items-center gap-10 mb-20">
+        {/* LEFT TEXT */}
+        <div className="flex-1">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+            About <span className="text-indigo-600">Our E-Learning Platform</span>
+          </h1>
+
+          <p className="mt-4 text-gray-600 text-lg leading-relaxed">
+            We provide high-quality online courses designed to help learners build skills,
+            gain confidence, and achieve career success. Our platform combines interactive
+            content, real-world projects, and expert guidance to make learning effective
+            and enjoyable.
           </p>
+
+          <button className="mt-6 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-semibold shadow-md transition">
+            Explore Courses
+          </button>
         </div>
-        <div className="lg:w-1/2 flex justify-center">
+
+        {/* RIGHT IMAGE */}
+        <div className="flex-1 flex justify-center">
           <img
-            src="/src/assets/about.jpg"
-            alt="Students learning together"
-            className="rounded-lg shadow-lg w-full max-w-md object-cover"
+            src={image1}
+            alt="Students learning online"
+            className="w-full max-w-md"
           />
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-6 lg:px-20">
-          <h2 className="text-3xl font-bold mb-8 text-gray-800">Meet the Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition">
-              <h3 className="font-semibold text-xl mb-2">Jane Doe</h3>
-              <p className="text-gray-600">Lead Instructor — Curriculum & Course Design</p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition">
-              <h3 className="font-semibold text-xl mb-2">John Smith</h3>
-              <p className="text-gray-600">Developer — Platform Engineering</p>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-lg transition">
-              <h3 className="font-semibold text-xl mb-2">Support Team</h3>
-              <p className="text-gray-600">Student Success & Assistance</p>
-            </div>
+      {/* OUR MISSION SECTION */}
+      <section className="mb-20">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
+        <p className="text-gray-600 text-lg leading-relaxed max-w-3xl">
+          Our mission is to make world-class education accessible to everyone. Whether you’re
+          a beginner or a working professional, we aim to empower you with skills that matter.
+          We believe learning should be flexible, affordable, and engaging.
+        </p>
+      </section>
+
+      {/* FEATURES SECTION */}
+      <section className="mb-20">
+        <h2 className="text-3xl font-bold text-gray-900 mb-8">What We Offer</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="p-6 bg-white border rounded-2xl shadow-md hover:shadow-lg transition">
+            <h3 className="text-xl font-semibold text-indigo-700 mb-2">Interactive Courses</h3>
+            <p className="text-gray-600">
+              Courses designed with quizzes, assignments, and real-world projects.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white border rounded-2xl shadow-md hover:shadow-lg transition">
+            <h3 className="text-xl font-semibold text-indigo-700 mb-2">Skilled Instructors</h3>
+            <p className="text-gray-600">
+              Learn from industry professionals with real experience.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white border rounded-2xl shadow-md hover:shadow-lg transition">
+            <h3 className="text-xl font-semibold text-indigo-700 mb-2">Flexible Learning</h3>
+            <p className="text-gray-600">
+              Access your courses anytime, anywhere, at your own pace.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="container mx-auto px-6 lg:px-20 py-16">
-        <h2 className="text-3xl font-bold mb-8 text-gray-800">Our Values</h2>
-        <ol className="list-decimal list-inside space-y-4 text-gray-700 text-lg">
-          <li><span className="font-semibold">Student-first design:</span> Prioritize learners in every decision.</li>
-          <li><span className="font-semibold">Continuous improvement:</span> Constantly enhance courses and platform.</li>
-          <li><span className="font-semibold">Accessibility for all:</span> Ensure everyone can learn without barriers.</li>
-        </ol>
+      {/* TEAM SECTION */}
+      <section>
+        <h2 className="text-3xl font-bold text-gray-900 mb-8">Meet the Team</h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+
+          <div className="text-center bg-white p-6 border rounded-2xl shadow-md">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/194/194938.png"
+              alt="Lead Instructor"
+              className="w-28 h-28 mx-auto rounded-full mb-4"
+            />
+            <h3 className="text-xl font-semibold">Jane Doe</h3>
+            <p className="text-indigo-600 font-medium">Lead Instructor</p>
+            <p className="text-gray-600 mt-2 text-sm">
+              Expert in course design and curriculum development.
+            </p>
+          </div>
+
+          <div className="text-center bg-white p-6 border rounded-2xl shadow-md">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+              alt="Developer"
+              className="w-28 h-28 mx-auto rounded-full mb-4"
+            />
+            <h3 className="text-xl font-semibold">John Smith</h3>
+            <p className="text-indigo-600 font-medium">Full-Stack Developer</p>
+            <p className="text-gray-600 mt-2 text-sm">
+              Handles platform features, user experience, and performance.
+            </p>
+          </div>
+
+          <div className="text-center bg-white p-6 border rounded-2xl shadow-md">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/295/295128.png"
+              alt="Support Team"
+              className="w-28 h-28 mx-auto rounded-full mb-4"
+            />
+            <h3 className="text-xl font-semibold">Support Team</h3>
+            <p className="text-indigo-600 font-medium">Student Assistance</p>
+            <p className="text-gray-600 mt-2 text-sm">
+              Helping students with course questions, accounts, and more.
+            </p>
+          </div>
+
+        </div>
       </section>
     </main>
   );
