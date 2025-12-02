@@ -54,6 +54,8 @@ app.use("/api/student/course", auth, studentCourseDetail);
 const teacherQuizRoutes = require('./routes/teacher/quizRoutes'); // updated routes
 app.use('/api/teacher/quizzes', teacherQuizRoutes);
 
+const userRoutes = require("./routes/userRoutes");
+app.use("/api", userRoutes);
 
 
 // course file routes

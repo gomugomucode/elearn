@@ -78,6 +78,26 @@ export const deleteAdminUser = async (userId) => {
   return response.data;
 };
 
+export const bulkUploadUsers = async (file, onProgress) => {
+  onProgress(20);
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await axios.post("/api/admin/bulk-upload-users", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (p) => {
+      const percent = Math.round((p.loaded / p.total) * 80);
+      onProgress(percent);
+    },
+    withCredentials: true,
+  });
+
+  onProgress(100);
+  return res.data;
+};
+
+
 export const getAdminLogs = async () => {
   const response = await api.get('/admin/logs');
   return response.data;

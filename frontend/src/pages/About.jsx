@@ -1,5 +1,5 @@
 import React from "react";
-import image1 from "../assets/images.jpg";
+import image1 from "../assets/images.svg";
 
 
 export default function About() {

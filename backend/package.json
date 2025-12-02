@@ -7,10 +7,13 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "cros": "^1.1.0",
+    "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
+    "exceljs": "^4.4.0",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
