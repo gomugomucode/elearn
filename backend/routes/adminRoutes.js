@@ -11,8 +11,28 @@ const {
   getDashboardStats,
   getAllUsers,
   getAllCourses,
-  getUserProfileById
+  getUserProfileById,
+  updateUser
 } = require('../controllers/adminController');
+
+
+router.put(
+  '/users/:id',
+  authenticateToken,
+  verifyRole('admin'),
+  updateUser
+);
+
+
+const { deleteUser } = require('../controllers/adminController');
+
+router.delete(
+  '/users/:id',
+  authenticateToken,
+  verifyRole('admin'),
+  deleteUser
+);
+
 
 
 const { bulkUploadUsers } = require('../controllers/adminController');

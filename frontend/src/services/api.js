@@ -6,8 +6,6 @@ const API_BASE = 'http://localhost:5000/api';
 const getToken = () => localStorage.getItem('token');
 
 
-// // set default base if backend on different port
-// axios.defaults.baseURL = 'http://localhost:5000';
 axios.defaults.withCredentials = true; // if you use cookies for auth
 
 // Create axios instance with default config
@@ -79,23 +77,27 @@ export const deleteAdminUser = async (userId) => {
 };
 
 export const bulkUploadUsers = async (file, onProgress) => {
-  onProgress(20);
-
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await axios.post("/api/admin/bulk-upload-users", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-    onUploadProgress: (p) => {
-      const percent = Math.round((p.loaded / p.total) * 80);
-      onProgress(percent);
-    },
-    withCredentials: true,
-  });
+  const res = await api.post(
+    "/admin/users/bulk-upload",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+      onUploadProgress: (p) => {
+        const percent = Math.round((p.loaded / p.total) * 100);
+        onProgress(percent);
+      }
+    }
+  );
 
-  onProgress(100);
   return res.data;
 };
+
+
 
 
 export const getAdminLogs = async () => {

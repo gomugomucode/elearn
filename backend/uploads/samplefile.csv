@@ -1,0 +1,4 @@
+name,email,password,role
+John Doe,john@example.com,pass123,student
+Sneha Verma,sneha@ex.com,pass123,teacher
+Bibek,bibek123@gmail.com,bibek123,admin

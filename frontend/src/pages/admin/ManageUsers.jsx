@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import {
   getAdminUsers,
   createAdminUser,
+  updateAdminUser,
   deleteAdminUser,
   bulkUploadUsers
 } from '../../services/api';
 
 const ManageUsers = () => {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editUser, setEditUser] = useState(null);
   const [teachers, setTeachers] = useState([]);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -86,6 +88,7 @@ Jane Smith,jane@example.com,pass123,teacher`;
     }
   };
 
+  // ---------------- Add User ----------------
   const handleAddUser = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -106,6 +109,33 @@ Jane Smith,jane@example.com,pass123,teacher`;
     }
   };
 
+  // ---------------- Edit User ----------------
+  const handleEditUser = (user) => {
+    setEditUser(user);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+
+    try {
+      await updateAdminUser(editUser.id, {
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value || undefined,
+        role: form.role.value,
+      });
+
+      alert("User updated!");
+      setEditUser(null);
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update user");
+    }
+  };
+
+  // ---------------- Delete User ----------------
   const handleDeleteUser = async (id) => {
     if (!window.confirm("Are you sure?")) return;
 
@@ -173,11 +203,34 @@ Jane Smith,jane@example.com,pass123,teacher`;
       )}
 
       {/* Users Tables */}
-      <UserTable title="Teachers" users={teachers} handleDelete={handleDeleteUser} />
-      <UserTable title="Students" users={students} handleDelete={handleDeleteUser} />
+      <UserTable
+        title="Teachers"
+        users={teachers}
+        handleEdit={handleEditUser}
+        handleDelete={handleDeleteUser}
+        extraColumns={['Courses', 'Status']}
+        mapExtra={(user) => [user.courses || 0, 'Active']}
+      />
+
+      <UserTable
+        title="Students"
+        users={students}
+        handleEdit={handleEditUser}
+        handleDelete={handleDeleteUser}
+        extraColumns={['Enrolled', 'Last Login']}
+        mapExtra={(user) => [user.enrolled || 0, user.lastLogin || 'Never']}
+      />
 
       {showAddModal && (
         <AddUserModal onClose={() => setShowAddModal(false)} onSubmit={handleAddUser} />
+      )}
+
+      {editUser && (
+        <EditUserModal
+          user={editUser}
+          onClose={() => setEditUser(null)}
+          onSubmit={handleEditSubmit}
+        />
       )}
     </div>
   );
@@ -186,7 +239,7 @@ Jane Smith,jane@example.com,pass123,teacher`;
 export default ManageUsers;
 
 // ---------------- TABLE ----------------
-const UserTable = ({ title, users, handleDelete }) => (
+const UserTable = ({ title, users, handleEdit, handleDelete, extraColumns = [], mapExtra = () => [] }) => (
   <div className="bg-white p-6 rounded-lg shadow mb-8">
     <h3 className="text-xl font-semibold mb-4">{title}</h3>
 
@@ -196,6 +249,7 @@ const UserTable = ({ title, users, handleDelete }) => (
           <th className="px-6 py-3">Name</th>
           <th className="px-6 py-3">Email</th>
           <th className="px-6 py-3">Role</th>
+          {extraColumns.map(col => <th key={col} className="px-6 py-3">{col}</th>)}
           <th className="px-6 py-3">Actions</th>
         </tr>
       </thead>
@@ -203,7 +257,7 @@ const UserTable = ({ title, users, handleDelete }) => (
       <tbody className="divide-y">
         {users.length === 0 ? (
           <tr>
-            <td colSpan="4" className="text-center py-4 text-gray-500">
+            <td colSpan={4 + extraColumns.length} className="text-center py-4 text-gray-500">
               No users found.
             </td>
           </tr>
@@ -213,13 +267,10 @@ const UserTable = ({ title, users, handleDelete }) => (
               <td className="px-6 py-4">{u.name}</td>
               <td className="px-6 py-4">{u.email}</td>
               <td className="px-6 py-4">{u.role}</td>
-              <td className="px-6 py-4">
-                <button
-                  onClick={() => handleDelete(u.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  Delete
-                </button>
+              {mapExtra(u).map((val, idx) => <td key={idx} className="px-6 py-4">{val}</td>)}
+              <td className="px-6 py-4 space-x-2">
+                <button onClick={() => handleEdit(u)} className="text-blue-600 hover:text-blue-900">Edit</button>
+                <button onClick={() => handleDelete(u.id)} className="text-red-600 hover:text-red-800">Delete</button>
               </td>
             </tr>
           ))
@@ -239,19 +290,38 @@ const AddUserModal = ({ onClose, onSubmit }) => (
         <input className="border w-full p-2 mb-3" name="name" placeholder="Name" required />
         <input className="border w-full p-2 mb-3" name="email" placeholder="Email" required />
         <input className="border w-full p-2 mb-3" name="password" type="password" placeholder="Password" required />
-
         <select className="border w-full p-2 mb-3" name="role" required>
           <option value="student">Student</option>
           <option value="teacher">Teacher</option>
         </select>
 
         <div className="flex justify-end space-x-3">
-          <button type="button" onClick={onClose} className="bg-gray-300 px-4 py-2 rounded">
-            Cancel
-          </button>
-          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-            Add
-          </button>
+          <button type="button" onClick={onClose} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+);
+
+// ---------------- EDIT USER MODAL ----------------
+const EditUserModal = ({ user, onClose, onSubmit }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="bg-white p-6 rounded-lg w-full max-w-md">
+      <h3 className="text-lg font-bold mb-4">Edit User</h3>
+
+      <form onSubmit={onSubmit}>
+        <input className="border w-full p-2 mb-3" name="name" defaultValue={user.name} placeholder="Name" required />
+        <input className="border w-full p-2 mb-3" name="email" defaultValue={user.email} placeholder="Email" required />
+        <input className="border w-full p-2 mb-3" name="password" type="password" placeholder="New Password (leave blank to keep)" />
+        <select className="border w-full p-2 mb-3" name="role" defaultValue={user.role} required>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select>
+
+        <div className="flex justify-end space-x-3">
+          <button type="button" onClick={onClose} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Update</button>
         </div>
       </form>
     </div>
@@ -273,9 +343,7 @@ const ErrorReportModal = ({ errors, onClose }) => (
       </div>
 
       <div className="flex justify-end mt-4">
-        <button onClick={onClose} className="bg-blue-600 text-white px-4 py-2 rounded">
-          Close
-        </button>
+        <button onClick={onClose} className="bg-blue-600 text-white px-4 py-2 rounded">Close</button>
       </div>
     </div>
   </div>

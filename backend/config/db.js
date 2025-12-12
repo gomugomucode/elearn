@@ -210,5 +210,7 @@ init();
 
 module.exports = {
   query: (...args) => pool.query(...args),
+  execute: (...args) => pool.execute(...args),
   getPool: () => pool,
 };
+
