@@ -1,121 +1,152 @@
 import React, { useState } from 'react';
+import { EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState({ sending: false, success: null, message: '' });
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
 
   const validate = () => {
     if (!form.name.trim()) return 'Name is required.';
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return 'A valid email is required.';
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      return 'A valid email is required.';
     if (!form.message.trim()) return 'Message cannot be empty.';
     return '';
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationError = validate();
-    if (validationError) {
-      setStatus({ sending: false, success: false, message: validationError });
+    const error = validate();
+    if (error) {
+      setStatus({ sending: false, success: false, message: error });
       return;
     }
 
     setStatus({ sending: true, success: null, message: '' });
+
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
+
       if (!res.ok) throw new Error('Network error');
+
       const data = await res.json();
-      setStatus({ sending: false, success: true, message: data.message || 'Message sent successfully.' });
+      setStatus({
+        sending: false,
+        success: true,
+        message: data.message || 'Message sent successfully.',
+      });
       setForm({ name: '', email: '', message: '' });
-    } catch (err) {
-      setStatus({ sending: false, success: false, message: 'Failed to send message. Please try again later.' });
+    } catch {
+      setStatus({
+        sending: false,
+        success: false,
+        message: 'Failed to send message. Please try again later.',
+      });
     }
   };
 
   return (
-    <main className="pt-24 min-h-screen bg-gray-50">
-      <div className="container mx-auto px-6 lg:px-20 py-16 flex flex-col lg:flex-row gap-16">
-        {/* Form Section */}
-        <div className="lg:w-2/3 bg-white p-8 rounded-lg shadow-lg">
-          <h1 className="text-4xl font-bold mb-4 text-gray-800">Contact Us</h1>
-          <p className="mb-6 text-gray-600">
-            If you have questions or feedback, please send us a message and we’ll get back to you.
-          </p>
+    <main className="min-h-screen bg-gradient-to-b from-indigo-50 to-white pt-24 pb-16">
+      <div className="container mx-auto px-6 lg:px-20">
 
-          <form className="space-y-4" onSubmit={handleSubmit} noValidate>
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Name</label>
+        {/* HERO */}
+        <section className="text-center mb-20">
+          <h1 className="text-5xl font-extrabold text-gray-900">
+            Get in <span className="text-indigo-600">Touch</span>
+          </h1>
+          <p className="mt-6 text-xl text-gray-700 max-w-3xl mx-auto">
+            Have questions, suggestions, or feedback? Send us a message and we’ll respond promptly.
+          </p>
+        </section>
+
+        <div className="flex flex-col lg:flex-row gap-16">
+
+          {/* FORM */}
+          <div className="lg:w-2/3 bg-white rounded-3xl shadow-2xl p-10 border border-gray-200">
+            <h2 className="text-3xl font-bold mb-6 text-gray-900">Send a Message</h2>
+
+            <form className="space-y-6" onSubmit={handleSubmit} noValidate>
               <input
+                type="text"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                type="text"
-                required
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Your Name"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500"
               />
-            </div>
 
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Email</label>
               <input
+                type="email"
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                type="email"
-                required
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="you@example.com"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500"
               />
-            </div>
 
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Message</label>
               <textarea
                 name="message"
                 value={form.message}
                 onChange={handleChange}
                 rows="6"
-                required
-                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Your Message..."
+                className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500"
               />
-            </div>
 
-            <button
-              type="submit"
-              disabled={status.sending}
-              className="w-full bg-blue-600 text-white font-semibold py-3 rounded hover:bg-blue-700 transition disabled:opacity-50"
-            >
-              {status.sending ? 'Sending…' : 'Send Message'}
-            </button>
+              <button
+                type="submit"
+                disabled={status.sending}
+                className="w-full py-4 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 disabled:opacity-50"
+              >
+                {status.sending ? 'Sending…' : 'Send Message'}
+              </button>
 
-            {status.message && (
-              <p className={`mt-2 text-center font-medium ${status.success ? 'text-green-600' : 'text-red-600'}`}>
-                {status.message}
-              </p>
-            )}
-          </form>
-        </div>
-
-        {/* Contact Info Section */}
-        <div className="lg:w-1/3 flex flex-col gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Other ways to reach us</h2>
-            <ul className="text-gray-700 space-y-2">
-              <li>Email: <a href="mailto:support@example.com" className="text-blue-600 hover:underline">support@example.com</a></li>
-              <li>Phone: <a href="tel:+10000000000" className="text-blue-600 hover:underline">+1 (000) 000-0000</a></li>
-            </ul>
+              {status.message && (
+                <p
+                  className={`mt-4 text-center font-medium ${
+                    status.success ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
+                  {status.message}
+                </p>
+              )}
+            </form>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-lg text-gray-700">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Our Office</h2>
-            <p>123 Learning Street</p>
-            <p>Knowledge City, Edu 56789</p>
+          {/* CONTACT INFO */}
+          <div className="lg:w-1/3 flex flex-col gap-6">
+
+            <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-200">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Info</h3>
+
+              <ul className="space-y-4">
+                <li className="flex items-center gap-3">
+                  <EnvelopeIcon className="w-6 h-6 text-indigo-600" />
+                  <a href="mailto:support@example.com" className="text-indigo-600 hover:underline">
+                    support@example.com
+                  </a>
+                </li>
+
+                <li className="flex items-center gap-3">
+                  <PhoneIcon className="w-6 h-6 text-indigo-600" />
+                  <a href="tel:+10000000000" className="text-indigo-600 hover:underline">
+                    +1 (000) 000-0000
+                  </a>
+                </li>
+
+                <li className="flex items-center gap-3">
+                  <MapPinIcon className="w-6 h-6 text-indigo-600" />
+                  <span>123 Learning Street, Knowledge City</span>
+                </li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </div>

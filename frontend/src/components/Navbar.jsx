@@ -167,7 +167,7 @@ const userItems = isLoggedIn
             <img src="/logo.png" alt="Logo" className="navbar-logo-img" />
           </div>
           <Link to="/" className="navbar-logo-text">
-            E-Learning
+            LearnHub
           </Link>
         </div>
 

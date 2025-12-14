@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 // Components
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import Footer from "./components/Footer";  // Make sure this import is present
 
 // Pages
 import Login from "./pages/Login";
@@ -45,37 +46,45 @@ import QuizPage from "./pages/student/QuizPage";
 import AssignmentSubmission from "./pages/student/AssignmentSubmission";
 import Assignments from "./pages/student/Assignments";
 import StudentProfile from "./pages/student/StudentProfile";
-import StudentQuiz from "./pages/student/StudentQuiz"
+import StudentQuiz from "./pages/student/StudentQuiz";
 
 // Layout Components
+ 
+
 const PublicLayout = ({ children }) => (
   <div className="flex flex-col min-h-screen bg-gray-50">
     <Navbar />
-    <main className="flex-1 pt-24">{children}</main>
+    
+    {/* Main content area - no global constraints */}
+    <main className="flex-1 pt-20 pb-12">
+      {children}  {/* Landingpage will control its own layout */}
+    </main>
+
+    <Footer />  {/* Full-width footer */}
   </div>
 );
 
 const AuthenticatedLayout = ({ children, user }) => (
   <div className="flex flex-col min-h-screen bg-gray-50">
     <Navbar />
-
     <div className="flex flex-1 pt-16">
-      {/* Sidebar only if logged in */}
-      {user ? <Sidebar userRole={user.role} userName={user.name} /> : null}
-
+      {user && <Sidebar userRole={user.role} userName={user.name} />}
       <main
         className={`flex-1 p-4 md:p-6 transition-all duration-300 ${
           user ? "ml-64" : ""
         }`}
       >
-        <div className="max-w-7xl mx-auto">{children}</div>
+        <div className="max-w-7xl mx-auto">
+          {children}
+        </div>
       </main>
     </div>
+    {/* <Footer />  Footer remains here for authenticated users */}
   </div>
 );
 
+// Protected Route Wrappers
 function StudentRoutesWrapper({ user, isLoggedIn }) {
-  // Parent wrapper for all /student/* routes so we don't repeat the layout and auth check.
   if (!isLoggedIn || user?.role !== "student") {
     return <Navigate to="/login" replace />;
   }
@@ -113,7 +122,7 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         Loading...
       </div>
     );
@@ -122,50 +131,13 @@ function AppContent() {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route
-        path="/"
-        element={
-          <PublicLayout>
-            <Landingpage />
-          </PublicLayout>
-        }
-      />
-      <Route
-        path="/login"
-        element={
-          <PublicLayout>
-            <Login />
-          </PublicLayout>
-        }
-      />
+      <Route path="/" element={<PublicLayout><Landingpage /></PublicLayout>} />
+      <Route path="/login" element={<PublicLayout><Login /></PublicLayout>} />
+      <Route path="/blogs" element={<PublicLayout><Blog /></PublicLayout>} />
+      <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+      <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
 
-      <Route
-        path="/blogs"
-        element={
-          <PublicLayout>
-            <Blog />
-          </PublicLayout>
-        }
-      />
-
-      <Route
-        path="/about"
-        element={
-          <PublicLayout>
-            <About />
-          </PublicLayout>
-        }
-      />
-
-      <Route
-        path="/contact"
-        element={
-          <PublicLayout>
-            <Contact />
-          </PublicLayout>
-        }
-      />
-
+      {/* Protected Course Browsing (requires login but no role restriction) */}
       <Route
         path="/course"
         element={
@@ -178,7 +150,6 @@ function AppContent() {
           )
         }
       />
-
       <Route
         path="/course/:id"
         element={
@@ -192,11 +163,8 @@ function AppContent() {
         }
       />
 
-      {/* Admin Routes (grouped) */}
-      <Route
-        path="/admin"
-        element={<AdminRoutesWrapper user={user} isLoggedIn={isLoggedIn} />}
-      >
+      {/* Admin Routes */}
+      <Route path="/admin" element={<AdminRoutesWrapper user={user} isLoggedIn={isLoggedIn} />}>
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<ManageUsers />} />
@@ -204,56 +172,33 @@ function AppContent() {
         <Route path="profile" element={<Profile />} />
       </Route>
 
-      {/* Teacher Routes (grouped) */}
-      <Route
-        path="/teacher"
-        element={<TeacherRoutesWrapper user={user} isLoggedIn={isLoggedIn} />}
-      >
+      {/* Teacher Routes */}
+      <Route path="/teacher" element={<TeacherRoutesWrapper user={user} isLoggedIn={isLoggedIn} />}>
         <Route index element={<TeacherDashboard />} />
         <Route path="dashboard" element={<TeacherDashboard />} />
         <Route path="courses" element={<TeacherCourses />} />
-
-        <Route path="/teacher/courses/:id/edit" element={<EditCourse />} />
+        <Route path="courses/:id/edit" element={<EditCourse />} /> {/* Fixed path */}
         <Route path="assignments" element={<TeacherAssignments />} />
         <Route path="quizzes" element={<TeacherQuizzes />} />
         <Route path="submissions" element={<TeacherSubmissions />} />
         <Route path="profile" element={<TeacherProfile />} />
       </Route>
 
-      {/* Student Routes (grouped) */}
-      <Route
-        path="/student"
-        element={<StudentRoutesWrapper user={user} isLoggedIn={isLoggedIn} />}
-      >
+      {/* Student Routes */}
+      <Route path="/student" element={<StudentRoutesWrapper user={user} isLoggedIn={isLoggedIn} />}>
         <Route index element={<StudentDashboard />} />
         <Route path="dashboard" element={<StudentDashboard />} />
         <Route path="courses" element={<StudentCourses />} />
         <Route path="course/:courseId" element={<StudentCourseDetail />} />
         <Route path="assignments" element={<Assignments />} />
-        <Route
-          path="assignments/:assignmentId"
-          element={<AssignmentSubmission />}
-        />{" "}
-          {/* ➕ ADD THIS */}
-  <Route path="quizzes" element={<StudentQuiz />} />
-        {/* CHANGED: assignment → assignments */}
+        <Route path="assignments/:assignmentId" element={<AssignmentSubmission />} />
+        <Route path="quizzes" element={<StudentQuiz />} />
         <Route path="quiz/:quizId" element={<QuizPage />} />
         <Route path="profile" element={<StudentProfile />} />
       </Route>
 
-      {/* If you want to handle unknown student/teacher/admin subpaths, add a specific 404 under the respective parent.
-          IMPORTANT: Do NOT add broad catch-all redirects like `path="/student/*" element={<Navigate to="/student/dashboard" />}`.
-          They will override intended child routes in some situations and cause the redirect loop/incorrect redirects. */}
-
-      {/* Global 404 */}
-      <Route
-        path="*"
-        element={
-          <PublicLayout>
-            <NotFound />
-          </PublicLayout>
-        }
-      />
+      {/* 404 Not Found */}
+      <Route path="*" element={<PublicLayout><NotFound /></PublicLayout>} />
     </Routes>
   );
 }
