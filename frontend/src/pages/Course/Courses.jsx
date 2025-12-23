@@ -1,4 +1,3 @@
-// src/pages/Course/Courses.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
@@ -33,16 +32,27 @@ export default function Courses() {
             key={course.id}
             className="bg-white rounded-xl shadow-md overflow-hidden"
           >
-            <img
-              src={`/api/courses/${course.id}/thumbnail`}
-              alt={course.title}
-              className="w-full h-40 object-cover"
-            />
+            {/* ✅ SAME IMAGE LOGIC AS TEACHER */}
+            {course.thumbnail || course.course_image ? (
+              <img
+                src={`http://localhost:5000/uploads/${
+                  course.thumbnail || course.course_image
+                }`}
+                alt={course.title}
+                className="w-full h-40 object-cover"
+              />
+            ) : (
+              <div className="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-400">
+                No Image
+              </div>
+            )}
 
             <div className="p-4">
               <h2 className="font-bold text-lg">{course.title}</h2>
               <p className="text-gray-600 text-sm mt-1">
-                {course.description?.slice(0, 70)}...
+                {course.description
+                  ? course.description.slice(0, 70) + "..."
+                  : "No description provided."}
               </p>
 
               <Link

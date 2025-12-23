@@ -9,7 +9,7 @@ const StudentCourses = () => {
     const load = async () => {
       try {
         const data = await fetchMyCourses();
-        setCourses(data.courses ?? data);
+        setCourses(data.courses || []);
       } catch (err) {
         console.error("Failed to load courses:", err);
       }
@@ -22,18 +22,29 @@ const StudentCourses = () => {
       <h1 className="text-2xl font-bold text-gray-800 mb-6">My Courses</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map(course => (
-          <div key={course.courseId} className="bg-white rounded-xl shadow-md overflow-hidden">
+        {courses.map((course) => (
+          <div
+            key={course.courseId}
+            className="bg-white rounded-xl shadow-md overflow-hidden"
+          >
+            {/* ✅ SAME IMAGE LOGIC AS TEACHER */}
             <img
-              src={`/api/courses/${course.courseId}/thumbnail`}
+              src={
+                course.thumbnail
+                  ? `http://localhost:5000/uploads/${course.thumbnail}`
+                  : "/placeholder-course.png"
+              }
               alt={course.title}
               className="w-full h-40 object-cover"
             />
 
             <div className="p-4">
               <h3 className="font-bold text-lg">{course.title}</h3>
-              <p className="text-sm text-gray-600">by {course.instructor}</p>
-{/* 
+              <p className="text-sm text-gray-600">
+                by {course.instructor}
+              </p>
+
+              {/* Progress (optional, already correct) */}
               <div className="mt-3">
                 <div className="flex justify-between text-sm text-gray-500 mb-1">
                   <span>Progress</span>
@@ -44,9 +55,9 @@ const StudentCourses = () => {
                   <div
                     className="bg-green-500 h-2 rounded-full"
                     style={{ width: `${course.progress}%` }}
-                  ></div>
+                  />
                 </div>
-              </div> */}
+              </div>
 
               <Link
                 to={`/student/course/${course.courseId}`}
@@ -63,5 +74,3 @@ const StudentCourses = () => {
 };
 
 export default StudentCourses;
-
-
