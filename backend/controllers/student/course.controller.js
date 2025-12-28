@@ -1,25 +1,35 @@
 const db = require("../../config/db");
 
+const BASE_URL = "http://localhost:5000";
+
+// ✅ GET MY COURSES
 exports.getMyCourses = async (req, res) => {
   const studentId = req.user.id;
 
   try {
     const [rows] = await db.query(
-      `SELECT 
-         c.id AS courseId,
-         c.title,
-         c.description,
-         c.thumbnail,
-         c.diagram_url,
-         u.name AS instructor,
-         e.enrolled_at
-       FROM enrollments e
-       JOIN courses c ON c.id = e.course_id
-       JOIN users u ON c.teacher_id = u.id
-       WHERE e.student_id = ?`,
-      [studentId]
-    );
+    `SELECT
+        e.course_id AS courseId,
+        c.title,
+        c.description,
+        c.thumbnail,   -- Use course table images, NOT enrollment table
+        c.course_image
+     FROM enrollments e
+     JOIN courses c ON c.id = e.course_id
+     WHERE e.student_id = ?`,
+    [studentId]
+);
 
+// Then prepend BASE_URL
+for (const course of rows) {
+  if (course.thumbnail) course.thumbnail = `${BASE_URL}/uploads/${course.thumbnail}`;
+  if (course.course_image) course.course_image = `${BASE_URL}/uploads/${course.course_image}`;
+}
+
+
+   
+
+    // Calculate progress (unchanged)
     for (const course of rows) {
       const [[assignTotal]] = await db.query(
         "SELECT COUNT(*) AS total FROM assignments WHERE course_id = ?",
@@ -27,9 +37,9 @@ exports.getMyCourses = async (req, res) => {
       );
 
       const [[assignDone]] = await db.query(
-        `SELECT COUNT(*) AS done 
-         FROM submissions 
-         WHERE student_id = ? 
+        `SELECT COUNT(*) AS done
+         FROM submissions
+         WHERE student_id = ?
          AND assignment_id IN (
            SELECT id FROM assignments WHERE course_id = ?
          )`,
@@ -42,9 +52,9 @@ exports.getMyCourses = async (req, res) => {
       );
 
       const [[quizDone]] = await db.query(
-        `SELECT COUNT(*) AS done 
-         FROM quiz_attempts 
-         WHERE student_id = ? 
+        `SELECT COUNT(*) AS done
+         FROM quiz_attempts
+         WHERE student_id = ?
          AND quiz_id IN (
            SELECT id FROM quizzes WHERE course_id = ?
          )`,
@@ -58,15 +68,13 @@ exports.getMyCourses = async (req, res) => {
     }
 
     res.json({ courses: rows });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not load courses" });
   }
 };
 
-
-
+// ✅ COURSE DETAIL
 exports.getCourseDetail = async (req, res) => {
   const courseId = req.params.courseId;
   const studentId = req.user.id;
@@ -86,11 +94,20 @@ exports.getCourseDetail = async (req, res) => {
          title,
          description,
          thumbnail,
-         diagram_url
+         course_image
        FROM courses
        WHERE id = ?`,
       [courseId]
     );
+
+    // 🔥 FIX: convert image filename → full URL
+    if (course.thumbnail) {
+      course.thumbnail = `${BASE_URL}/uploads/${course.thumbnail}`;
+    }
+
+    if (course.course_image) {
+      course.course_image = `${BASE_URL}/uploads/${course.course_image}`;
+    }
 
     const [materials] = await db.query(
       `SELECT * FROM study_materials WHERE course_id = ?`,
@@ -123,10 +140,8 @@ exports.getCourseDetail = async (req, res) => {
         quizzes
       }
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to load course detail" });
   }
 };
-

@@ -43,7 +43,7 @@ router.post("/:courseId", isStudent, async (req, res) => {
     const { courseId } = req.params;
     const studentId = req.user.id;
 
-    // Check existing
+    // Check existing enrollment
     const [existing] = await db.query(
       "SELECT * FROM enrollments WHERE student_id=? AND course_id=?",
       [studentId, courseId]
@@ -56,20 +56,31 @@ router.post("/:courseId", isStudent, async (req, res) => {
       });
     }
 
-    // Insert new enrollment
+    // Insert enrollment
     await db.query(
-      "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)",
+      "INSERT INTO enrollments (student_id, course_id, enrolled_at) VALUES (?, ?, NOW())",
       [studentId, courseId]
+    );
+
+    // Fetch course info for frontend
+    const [[course]] = await db.query(
+      "SELECT title, description, thumbnail, course_image FROM courses WHERE id=?",
+      [courseId]
     );
 
     res.json({
       enrolled: true,
-      message: "Enrollment successful"
+      message: "Enrollment successful",
+      course
     });
+
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+
 
 module.exports = router;

@@ -33,10 +33,10 @@ export default function Courses() {
             className="bg-white rounded-xl shadow-md overflow-hidden"
           >
             {/* ✅ SAME IMAGE LOGIC AS TEACHER */}
-            {course.thumbnail || course.course_image ? (
+            {course.thumbnail  ? (
               <img
                 src={`http://localhost:5000/uploads/${
-                  course.thumbnail || course.course_image
+                  course.thumbnail 
                 }`}
                 alt={course.title}
                 className="w-full h-40 object-cover"

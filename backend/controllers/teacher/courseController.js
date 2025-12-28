@@ -4,20 +4,23 @@ const pool = require('../../config/db');
 exports.createCourse = async (req, res) => {
   const { title, description } = req.body;
   const teacherId = req.user.id;
+
   const thumbnail = req.files?.thumbnail?.[0]?.filename || null;
-  const diagram_url = req.files?.course_image?.[0]?.filename || null; // rename to match DB
+  const course_image = req.files?.course_image?.[0]?.filename || null;
 
   try {
     const [result] = await pool.query(
-      'INSERT INTO courses (title, description, teacher_id, thumbnail, diagram_url) VALUES (?, ?, ?, ?, ?)',
-      [title, description, teacherId, thumbnail, diagram_url]
+      `INSERT INTO courses 
+       (title, description, teacher_id, thumbnail, course_image)
+       VALUES (?, ?, ?, ?, ?)`,
+      [title, description, teacherId, thumbnail, course_image]
     );
 
-    res.status(201).json({ 
-      message: 'Course created successfully', 
+    res.status(201).json({
+      message: 'Course created successfully',
       courseId: result.insertId,
       thumbnail,
-      diagram_url
+      course_image
     });
   } catch (err) {
     console.error(err);
@@ -30,7 +33,10 @@ exports.getTeacherCourses = async (req, res) => {
   const teacherId = req.user.id;
 
   try {
-    const [rows] = await pool.query('SELECT * FROM courses WHERE teacher_id = ?', [teacherId]);
+    const [rows] = await pool.query(
+      'SELECT * FROM courses WHERE teacher_id = ?',
+      [teacherId]
+    );
     res.json(rows);
   } catch (err) {
     console.error(err);
@@ -45,16 +51,18 @@ exports.updateCourse = async (req, res) => {
   const teacherId = req.user.id;
 
   const thumbnail = req.files?.thumbnail?.[0]?.filename || null;
-  const diagram_url = req.files?.course_image?.[0]?.filename || null;
+  const course_image = req.files?.course_image?.[0]?.filename || null;
 
   try {
     const [result] = await pool.query(
-      `UPDATE courses 
-       SET title = ?, description = ?, status = COALESCE(?, status),
+      `UPDATE courses
+       SET title = ?,
+           description = ?,
+           status = COALESCE(?, status),
            thumbnail = COALESCE(?, thumbnail),
-           diagram_url = COALESCE(?, diagram_url)
+           course_image = COALESCE(?, course_image)
        WHERE id = ? AND teacher_id = ?`,
-      [title, description, status, thumbnail, diagram_url, id, teacherId]
+      [title, description, status, thumbnail, course_image, id, teacherId]
     );
 
     if (result.affectedRows === 0) {
@@ -74,7 +82,6 @@ exports.deleteCourse = async (req, res) => {
   const teacherId = req.user.id;
 
   try {
-    // Delete related assignments first OR use ON DELETE CASCADE in DB
     await pool.query('DELETE FROM assignments WHERE course_id = ?', [id]);
 
     const [result] = await pool.query(
@@ -93,14 +100,14 @@ exports.deleteCourse = async (req, res) => {
   }
 };
 
-// ✅ Get All Active Courses (For students)
+// ✅ Get All Active Courses (Students)
 exports.getAllCourses = async (req, res) => {
   try {
     const [rows] = await pool.query(
-      `SELECT c.*, u.name as teacher_name 
-       FROM courses c 
-       JOIN users u ON c.teacher_id = u.id 
-       WHERE c.status = "Active"`
+      `SELECT c.*, u.name AS teacher_name
+       FROM courses c
+       JOIN users u ON c.teacher_id = u.id
+       WHERE c.status = 'Active'`
     );
     res.json(rows);
   } catch (err) {

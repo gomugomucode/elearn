@@ -30,11 +30,19 @@ export default function CourseDetail() {
       <h1 className="text-3xl font-bold">{course.title}</h1>
       <p className="text-gray-700 mt-3">{course.description}</p>
 
-      <img
-        src={`/api/courses/${id}/thumbnail`}
-        className="w-full rounded-lg mt-5"
-        alt="Thumbnail"
-      />
+       { course.course_image ? (
+              <img
+                src={`http://localhost:5000/uploads/${
+                   course.course_image
+                }`}
+                alt={course.title}
+                className="w-full h-40 object-cover"
+              />
+            ) : (
+              <div className="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-400">
+                No Image
+              </div>
+            )}
 
       {/* Course Content */}
       <div className="mt-8">

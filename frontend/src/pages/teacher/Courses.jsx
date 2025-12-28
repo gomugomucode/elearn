@@ -60,7 +60,7 @@ const TeacherCourses = () => {
         title: newCourse.title,
         description: newCourse.description,
         thumbnail: response.thumbnail || null,
-        course_image: response.diagram_url || null, // adjust based on your actual API response
+        course_image: response.course_image || null, // adjust based on your actual API response
       };
 
       setCourses([...courses, newCourseData]);
