@@ -7,23 +7,34 @@ const db = require("../../config/db");
 exports.getAssignments = async (req, res) => {
   try {
     const studentId = req.user.id;
-    console.log("Fetching assignments for student:", studentId);
 
     const [assignments] = await db.query(
       `
       SELECT 
-        a.id, 
-        a.title, 
-        a.description, 
-        a.due_date, 
-        c.title AS course_title
+        a.id,
+        a.title,
+        a.description,
+        a.due_date,
+        c.title AS course_title,
+
+        CASE 
+          WHEN s.id IS NOT NULL THEN true
+          ELSE false
+        END AS submitted
+
       FROM assignments a
       JOIN enrollments e ON e.course_id = a.course_id
       JOIN courses c ON c.id = a.course_id
+
+      LEFT JOIN submissions s
+        ON s.assignment_id = a.id
+        AND s.student_id = ?
+
       WHERE e.student_id = ?
-      ORDER BY a.due_date DESC
+
+      ORDER BY a.due_date ASC
       `,
-      [studentId]
+      [studentId, studentId]
     );
 
     res.json(assignments);
@@ -35,6 +46,7 @@ exports.getAssignments = async (req, res) => {
     });
   }
 };
+
 
 // ----------------------------
 // Submit Assignment
