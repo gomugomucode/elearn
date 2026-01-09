@@ -47,6 +47,7 @@ import AssignmentSubmission from "./pages/student/AssignmentSubmission";
 import Assignments from "./pages/student/Assignments";
 import StudentProfile from "./pages/student/StudentProfile";
 import StudentQuiz from "./pages/student/StudentQuiz";
+import QuizResult from "./pages/student/QuizResult";
 
 // Layout Components
  
@@ -194,6 +195,8 @@ function AppContent() {
         <Route path="assignments/:assignmentId" element={<AssignmentSubmission />} />
         <Route path="quizzes" element={<StudentQuiz />} />
         <Route path="quiz/:quizId" element={<QuizPage />} />
+        <Route path="/student/quiz/result/:quizId" element={<QuizResult />} />
+
         <Route path="profile" element={<StudentProfile />} />
       </Route>
 

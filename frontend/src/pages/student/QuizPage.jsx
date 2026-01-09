@@ -1,8 +1,6 @@
-
-
-import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function QuizPage() {
   const { quizId } = useParams();
@@ -10,35 +8,96 @@ export default function QuizPage() {
 
   const [quiz, setQuiz] = useState(null);
   const [answers, setAnswers] = useState({});
+  const [timeLeft, setTimeLeft] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [attemptId, setAttemptId] = useState(null); // ✅ store attemptId
 
+  // 1️⃣ Start quiz + initialize timer
   useEffect(() => {
-    api.get(`/student/quiz/start/${quizId}`).then((res) => {
-      setQuiz(res.data.quiz);
-    });
+    api.get(`/student/quiz/start/${quizId}`)
+      .then(res => {
+        setQuiz(res.data.quiz);
+        setTimeLeft(res.data.quiz.time_limit * 60); // minutes → seconds
+        setAttemptId(res.data.attemptId); // ✅ save attemptId
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to load quiz");
+      });
   }, [quizId]);
 
-  const submitQuiz = async () => {
-    await api.post(`/student/quiz/submit/${quizId}`, { answers });
-    alert("Quiz Submitted!");
-    navigate("/student/courses");
+  // 2️⃣ Countdown timer
+  useEffect(() => {
+    if (timeLeft === null || submitting) return;
+
+    if (timeLeft <= 0) {
+      handleSubmit(true); // auto-submit when time over
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(t => t - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, submitting]);
+
+  // 3️⃣ Submit quiz (manual or auto)
+  const handleSubmit = async (auto = false) => {
+    if (submitting) return;
+
+    if (!attemptId) {
+      alert("Quiz session expired. Please restart the quiz.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      await api.post(`/student/quiz/submit/${quizId}`, {
+        answers,
+        attemptId, // ✅ send attemptId
+      });
+
+      if (!auto) alert("Quiz submitted successfully.");
+
+      navigate(`/student/quiz/result/${quizId}`);
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Submission failed");
+      setSubmitting(false);
+    }
   };
 
-  if (!quiz) return <p>Loading quiz...</p>;
+  if (!quiz) return <p className="p-6">Loading quiz...</p>;
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold">{quiz.title}</h1>
+      <h1 className="text-2xl font-bold mb-2">{quiz.title}</h1>
+
+      <p className="mb-4 font-semibold text-red-600">
+        ⏱ Time Left: {minutes}:{seconds.toString().padStart(2, "0")}
+      </p>
 
       {quiz.questions.map((q, i) => (
-        <div key={q.id} className="mt-4 border p-4 rounded">
-          <h2 className="font-semibold">{i + 1}. {q.question}</h2>
+        <div key={q.id} className="mb-4 border p-4 rounded">
+          <p className="font-semibold">
+            {i + 1}. {q.question}
+          </p>
 
-          {q.options.map((opt) => (
+          {q.options.map(opt => (
             <label key={opt} className="block mt-1">
               <input
                 type="radio"
                 name={q.id}
-                onChange={() => setAnswers({ ...answers, [q.id]: opt })}
+                value={opt}
+                disabled={timeLeft <= 0}
+                onChange={() =>
+                  setAnswers(prev => ({ ...prev, [q.id]: opt }))
+                }
               />
               <span className="ml-2">{opt}</span>
             </label>
@@ -47,8 +106,9 @@ export default function QuizPage() {
       ))}
 
       <button
-        onClick={submitQuiz}
-        className="mt-6 bg-blue-600 text-white px-6 py-2 rounded w-full"
+        onClick={() => handleSubmit(false)}
+        disabled={submitting || timeLeft <= 0}
+        className="w-full bg-blue-600 text-white py-2 rounded mt-4 disabled:bg-gray-400"
       >
         Submit Quiz
       </button>

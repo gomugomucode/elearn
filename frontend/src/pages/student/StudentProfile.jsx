@@ -1,116 +1,115 @@
-// import { useOutletContext } from 'react-router-dom';
-// import { useState } from 'react';
+// src/pages/student/Profile.jsx
+import { useEffect, useState } from 'react';
+import { getStudentProfile, updateStudentProfile } from '../../services/api';
 
-// const StudentProfile = () => {
-//   const { studentData } = useOutletContext();
-//   const [formData, setFormData] = useState({
-//     name: studentData?.name || '',
-//     email: studentData?.email || '',
-//     phone: studentData?.phone || '',
-//   });
+const StudentProfile = () => {
+  const [profile, setProfile] = useState(null);
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [editing, setEditing] = useState(false);
 
-//   const handleChange = (e) => {
-//     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-//   };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await getStudentProfile();
+        setProfile(data);
+        setForm({ name: data.name, email: data.email, password: '' });
+      } catch (err) {
+        console.error(err);
+        alert('Failed to load profile. Please log in again.');
+      }
+    };
+    fetchProfile();
+  }, []);
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       await fetch('/api/student/profile', {
-//         method: 'PUT',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(formData),
-//       });
-//       alert('Profile updated successfully!');
-//     } catch (error) {
-//       alert('Error updating profile. Please try again.');
-//     }
-//   };
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-//   return (
-//     <div className="max-w-2xl mx-auto p-6">
-//       <h1 className="text-2xl font-bold text-gray-800 mb-6">My Profile</h1>
-//       <div className="bg-white p-6 rounded-lg shadow">
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700">Full Name</label>
-//             <input
-//               type="text"
-//               name="name"
-//               value={formData.name}
-//               onChange={handleChange}
-//               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-//             />
-//           </div>
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700">Email</label>
-//             <input
-//               type="email"
-//               name="email"
-//               value={formData.email}
-//               onChange={handleChange}
-//               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-//             />
-//           </div>
-//           <div>
-//             <label className="block text-sm font-medium text-gray-700">Phone</label>
-//             <input
-//               type="tel"
-//               name="phone"
-//               value={formData.phone}
-//               onChange={handleChange}
-//               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-//             />
-//           </div>
-//           <button
-//             type="submit"
-//             className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-//           >
-//             Save Changes
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      const updated = await updateStudentProfile(form);
+      setProfile(updated);
+      setEditing(false);
+      alert('Profile updated!');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to update profile.');
+    }
+  };
 
-// export default StudentProfile;
+  if (!profile) return <div className="p-6">Loading...</div>;
 
-export default function StudentProfile() {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">My Profile</h1>
-      <div className="bg-white p-6 rounded-lg shadow">
-        <div className="space-y-4">
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">My Profile</h1>
+
+      {editing ? (
+        <form onSubmit={handleSave} className="bg-white p-4 rounded shadow max-w-md space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Full Name</label>
+            <label className="block mb-1">Full Name</label>
             <input
               type="text"
-              defaultValue="Student User"
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-50"
-              readOnly
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
             />
           </div>
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block mb-1">Email</label>
             <input
               type="email"
-              defaultValue="student@example.com"
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-50"
-              readOnly
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
             />
           </div>
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">Role</label>
+            <label className="block mb-1">New Password (optional)</label>
             <input
-              type="text"
-              defaultValue="Student"
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-50"
-              readOnly
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
             />
           </div>
+
+          <div className="flex gap-2">
+            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditing(false)}
+              className="px-4 py-2 bg-gray-300 rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      ) : (
+        <div className="bg-white p-4 rounded shadow max-w-md space-y-3">
+          <p><strong>Name:</strong> {profile.name}</p>
+          <p><strong>Email:</strong> {profile.email}</p>
+          <p><strong>Role:</strong> Student</p>
+          {/* <p><strong>Joined:</strong> {new Date(profile.created_at).toLocaleDateString()}</p> */}
+
+          <button
+            onClick={() => setEditing(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Edit Profile
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
-}
+};
+
+export default StudentProfile;

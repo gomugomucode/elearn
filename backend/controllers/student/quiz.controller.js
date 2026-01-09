@@ -1,14 +1,13 @@
 const db = require("../../config/db");
 
-// List all available quizzes for student
+/* =========================
+   LIST QUIZZES
+========================= */
 exports.listQuizzes = async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT 
-        q.id, 
-        q.title, 
-        c.title AS courseName,
-        (SELECT COUNT(*) FROM quiz_questions WHERE quiz_id = q.id) AS totalQuestions
+      SELECT q.id, q.title, c.title AS courseName,
+      (SELECT COUNT(*) FROM quiz_questions WHERE quiz_id = q.id) AS totalQuestions
       FROM quizzes q
       LEFT JOIN courses c ON c.id = q.course_id
       WHERE q.is_active = 1
@@ -16,97 +15,200 @@ exports.listQuizzes = async (req, res) => {
 
     res.json({ quizzes: rows });
   } catch (err) {
-    console.error("listQuizzes error:", err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// Start a quiz
+/* =========================
+   START QUIZ (NEW ATTEMPT)
+========================= */
 exports.startQuiz = async (req, res) => {
   const quizId = req.params.quizId;
-  const userId = req.user.id;
+  const studentId = req.user.id;
 
   try {
-    // Get quiz info
-    const [quizRows] = await db.query(
-      "SELECT id, title, course_id, time_limit FROM quizzes WHERE id = ?",
+    const [[quiz]] = await db.query(
+      "SELECT id, title, time_limit FROM quizzes WHERE id = ?",
       [quizId]
     );
-    if (!quizRows.length) return res.status(404).json({ message: "Quiz not found" });
-    const quiz = quizRows[0];
+    if (!quiz) return res.status(404).json({ message: "Quiz not found" });
 
-    // Check if attempt exists
-    const [attempts] = await db.query(
-      "SELECT * FROM quiz_attempts WHERE quiz_id = ? AND student_id = ?",
-      [quizId, userId]
+    // Always create NEW attempt
+    const [result] = await db.query(
+      `INSERT INTO quiz_attempts (quiz_id, student_id, score, start_time, answers)
+       VALUES (?, ?, 0, NOW(), '{}')`,
+      [quizId, studentId]
     );
 
-    let attempt;
-    if (attempts.length === 0) {
-      const [result] = await db.query(
-        "INSERT INTO quiz_attempts (quiz_id, student_id, score, start_time, answers) VALUES (?, ?, ?, NOW(), ?)",
-        [quizId, userId, 0, '{}']
-      );
-      attempt = { id: result.insertId, start_time: new Date() };
-    } else {
-      attempt = attempts[0];
-    }
-
-    // Get questions
-    const [questionRows] = await db.query(
-      "SELECT id, question_text, options, correct_answer FROM quiz_questions WHERE quiz_id = ?",
+    const [questions] = await db.query(
+      "SELECT id, question_text, options FROM quiz_questions WHERE quiz_id = ?",
       [quizId]
     );
 
-    const questions = questionRows.map(q => ({
-      id: q.id,
-      question: q.question_text,
-      options: JSON.parse(q.options)
-    }));
-
-    res.json({ 
-      quiz: { ...quiz, questions }, 
-      attemptId: attempt.id,
-      startTime: attempt.start_time
+    res.json({
+      quiz: {
+        id: quiz.id,
+        title: quiz.title,
+        time_limit: quiz.time_limit,
+        questions: questions.map(q => ({
+          id: q.id,
+          question: q.question_text,
+          options: JSON.parse(q.options)
+        }))
+      },
+      attemptId: result.insertId
     });
   } catch (err) {
-    console.error("startQuiz error:", err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// Submit quiz
+/* =========================
+   SUBMIT QUIZ (FINAL)
+========================= */
 exports.submitQuiz = async (req, res) => {
   const quizId = req.params.quizId;
-  const userId = req.user.id;
-  const { answers } = req.body;
+  const studentId = req.user.id;
+  const { answers, attemptId } = req.body;
 
   try {
-    const [[quiz]] = await db.query("SELECT time_limit FROM quizzes WHERE id = ?", [quizId]);
-    const [[attempt]] = await db.query(
-      "SELECT * FROM quiz_attempts WHERE quiz_id = ? AND student_id = ?",
-      [quizId, userId]
+    const [[quiz]] = await db.query(
+      "SELECT time_limit FROM quizzes WHERE id = ?",
+      [quizId]
     );
 
-    if (!attempt) return res.status(400).json({ message: "Quiz not started yet." });
+    const [[attempt]] = await db.query(
+      "SELECT * FROM quiz_attempts WHERE id = ? AND student_id = ?",
+      [attemptId, studentId]
+    );
 
-    // Check time limit
-    const startTime = new Date(attempt.start_time);
-    const now = new Date();
-    const timeLimitMs = quiz.time_limit * 60 * 1000;
-    if (now - startTime > timeLimitMs) {
-      return res.status(400).json({ message: "Time is up! Please restart the quiz." });
+    if (!attempt) {
+      return res.status(400).json({ message: "Invalid attempt" });
     }
 
-    // Update answers
-    await db.query(
-      "UPDATE quiz_attempts SET answers = ?, score = ? WHERE id = ?",
-      [JSON.stringify(answers), 0, attempt.id]
+    // ⏱ Time check
+    const timeLimitMs = quiz.time_limit * 60 * 1000;
+    const isLate = Date.now() - new Date(attempt.start_time).getTime() > timeLimitMs;
+
+    const [questions] = await db.query(
+      "SELECT id, correct_answer FROM quiz_questions WHERE quiz_id = ?",
+      [quizId]
     );
 
-    res.json({ message: "Quiz submitted successfully" });
+    let correct = 0;
+
+    questions.forEach(q => {
+      if (
+        answers.hasOwnProperty(q.id) &&
+        String(answers[q.id]) === String(q.correct_answer)
+      ) {
+        correct++;
+      }
+    });
+
+    const total = questions.length;
+    const score = Number(((correct / total) * 100).toFixed(2));
+
+    await db.query(
+      `UPDATE quiz_attempts
+       SET answers = ?, score = ?, attempt_time = NOW()
+       WHERE id = ?`,
+      [JSON.stringify(answers), score, attemptId]
+    );
+
+    res.json({
+      message: isLate
+        ? "Time over. Quiz auto-submitted."
+        : "Quiz submitted successfully.",
+      score,
+      correct,
+      total
+    });
+
   } catch (err) {
     console.error("submitQuiz error:", err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server error" });
   }
 };
+
+/* =========================
+   RESULT (TRUST DB)
+========================= */
+// exports.getQuizResult = async (req, res) => {
+//   const quizId = req.params.quizId;
+//   const studentId = req.user.id;
+
+//   try {
+//     const [[row]] = await db.query(`
+//       SELECT q.title, qa.score,
+//       (SELECT COUNT(*) FROM quiz_questions WHERE quiz_id = q.id) AS total
+//       FROM quiz_attempts qa
+//       JOIN quizzes q ON q.id = qa.quiz_id
+//       WHERE qa.quiz_id = ? AND qa.student_id = ?
+//       ORDER BY qa.attempt_time DESC
+//       LIMIT 1
+//     `, [quizId, studentId]);
+
+//     if (!row) {
+//       return res.status(404).json({ message: "Result not found" });
+//     }
+
+//     res.json({ result: row });
+//   } catch (err) {
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+
+exports.getQuizResult = async (req, res) => {
+  const quizId = req.params.quizId;
+  const studentId = req.user.id;
+
+  try {
+    // Get latest attempt
+    const [[attempt]] = await db.query(`
+      SELECT qa.id, qa.score, qa.answers, q.title
+      FROM quiz_attempts qa
+      JOIN quizzes q ON q.id = qa.quiz_id
+      WHERE qa.quiz_id = ? AND qa.student_id = ?
+      ORDER BY qa.attempt_time DESC
+      LIMIT 1
+    `, [quizId, studentId]);
+
+    if (!attempt) {
+      return res.status(404).json({ message: "Result not found" });
+    }
+
+    // Get total questions
+    const [questions] = await db.query(
+      "SELECT id, correct_answer FROM quiz_questions WHERE quiz_id = ?",
+      [quizId]
+    );
+
+    let correct = 0;
+    const answers = JSON.parse(attempt.answers || '{}');
+
+    questions.forEach(q => {
+      if (answers.hasOwnProperty(q.id) &&
+          String(answers[q.id]) === String(q.correct_answer)) {
+        correct++;
+      }
+    });
+
+    const total = questions.length;
+
+    res.json({
+      result: {
+        title: attempt.title,
+        correct,
+        total,
+        score: Number(((correct / total) * 100).toFixed(2)) // percentage
+      }
+    });
+
+  } catch (err) {
+    console.error("getQuizResult error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+

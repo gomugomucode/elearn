@@ -17,35 +17,34 @@ exports.getAssignments = async (req, res) => {
         a.due_date,
         c.title AS course_title,
 
+        s.status,
+        s.grade,
+        s.feedback,
+
         CASE 
-          WHEN s.id IS NOT NULL THEN true
-          ELSE false
+          WHEN s.id IS NOT NULL THEN 1 ELSE 0
         END AS submitted
 
       FROM assignments a
       JOIN enrollments e ON e.course_id = a.course_id
       JOIN courses c ON c.id = a.course_id
-
-      LEFT JOIN submissions s
-        ON s.assignment_id = a.id
+      LEFT JOIN submissions s 
+        ON s.assignment_id = a.id 
         AND s.student_id = ?
 
       WHERE e.student_id = ?
-
-      ORDER BY a.due_date ASC
+      ORDER BY a.due_date DESC
       `,
       [studentId, studentId]
     );
 
     res.json(assignments);
   } catch (err) {
-    console.error("Assignment fetch error:", err);
-    res.status(500).json({
-      message: "Failed to load assignments",
-      error: err.message,
-    });
+    console.error(err);
+    res.status(500).json({ message: "Failed to load assignments" });
   }
 };
+
 
 
 // ----------------------------

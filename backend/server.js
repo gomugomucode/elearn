@@ -88,6 +88,9 @@ const studentCourseRoutes = require("./routes/student/course.routes");
 const studentQuizRoutes = require("./routes/student/quiz.routes");
 const studentAssignmentRoutes = require("./routes/student/assignment.routes");
 const studentStatsRoutes = require("./routes/student/stats.routes");
+const studentProfileRoutes = require('./routes/student/profileRoutes');
+app.use('/api/student/profile', studentProfileRoutes);
+
 
 // const router = express.Router();
 

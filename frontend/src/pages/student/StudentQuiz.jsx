@@ -6,7 +6,7 @@ export default function StudentQuiz() {
   const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
-    api.get("/student/quiz/quizzes")
+    api.get("/student/quiz")
       .then((res) => setQuizzes(res.data.quizzes))
       .catch(err => console.error(err));
   }, []);

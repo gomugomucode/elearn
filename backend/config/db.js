@@ -1,4 +1,3 @@
-// server/config/db.js
 const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
 
@@ -9,14 +8,13 @@ const {
   DB_USER = 'root',
   DB_PASS = '',
   DB_NAME = 'elearning_db',
-  NODE_ENV = 'development', // default to development
+  NODE_ENV = 'development',
 } = process.env;
 
 let pool;
 
 async function init() {
   try {
-    // Connect to MySQL server (without DB)
     const connection = await mysql.createConnection({
       host: DB_HOST,
       user: DB_USER,
@@ -25,17 +23,15 @@ async function init() {
     });
 
     if (NODE_ENV === 'development') {
-  console.log('⚠️ Development mode: using existing database...');
-  await connection.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`; USE \`${DB_NAME}\`;`);
-}
- else {
+      console.log('⚠️ Development mode: using existing database...');
+      await connection.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`; USE \`${DB_NAME}\`;`);
+    } else {
       console.log('✅ Production mode: keeping existing database.');
       await connection.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`; USE \`${DB_NAME}\`;`);
     }
 
     await connection.end();
 
-    // Create pool with DB
     pool = mysql.createPool({
       host: DB_HOST,
       user: DB_USER,
@@ -47,13 +43,10 @@ async function init() {
       multipleStatements: true,
     });
 
-    // Full schema and seed
     const schemaAndSeed = `
       START TRANSACTION;
 
-      -- --------------------------------------------------------
-      -- TABLE: users
-      -- --------------------------------------------------------
+      -- Users
       CREATE TABLE IF NOT EXISTS users (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
@@ -71,9 +64,7 @@ async function init() {
 
       ALTER TABLE users AUTO_INCREMENT = 104;
 
-      -- --------------------------------------------------------
-      -- TABLE: courses
-      -- --------------------------------------------------------
+      -- Courses
       CREATE TABLE IF NOT EXISTS courses (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(100) NOT NULL,
@@ -87,9 +78,7 @@ async function init() {
         CONSTRAINT courses_ibfk_1 FOREIGN KEY (teacher_id) REFERENCES users (id)
       );
 
-      -- --------------------------------------------------------
-      -- TABLE: assignments
-      -- --------------------------------------------------------
+      -- Assignments
       CREATE TABLE IF NOT EXISTS assignments (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         course_id INT(11) DEFAULT NULL,
@@ -102,28 +91,21 @@ async function init() {
         CONSTRAINT assignments_ibfk_1 FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
       );
 
-      -- --------------------------------------------------------
-      -- TABLE: enrollments
-      -- --------------------------------------------------------
-      -- --------------------------------------------------------
--- TABLE: enrollments
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS enrollments (
-  id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  student_id INT(11) DEFAULT NULL,
-  course_id INT(11) DEFAULT NULL,
-  enrolled_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  thumbnail VARCHAR(255) DEFAULT NULL,
-  course_image VARCHAR(255) DEFAULT NULL,
-  UNIQUE KEY unique_enrollment (student_id,course_id),
-  KEY enrollments_ibfk_2 (course_id),
-  CONSTRAINT enrollments_ibfk_1 FOREIGN KEY (student_id) REFERENCES users(id),
-  CONSTRAINT enrollments_ibfk_2 FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
-);
+      -- Enrollments
+      CREATE TABLE IF NOT EXISTS enrollments (
+        id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        student_id INT(11) DEFAULT NULL,
+        course_id INT(11) DEFAULT NULL,
+        enrolled_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        thumbnail VARCHAR(255) DEFAULT NULL,
+        course_image VARCHAR(255) DEFAULT NULL,
+        UNIQUE KEY unique_enrollment (student_id,course_id),
+        KEY enrollments_ibfk_2 (course_id),
+        CONSTRAINT enrollments_ibfk_1 FOREIGN KEY (student_id) REFERENCES users(id),
+        CONSTRAINT enrollments_ibfk_2 FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+      );
 
-      -- --------------------------------------------------------
-      -- TABLE: quizzes
-      -- --------------------------------------------------------
+      -- Quizzes
       CREATE TABLE IF NOT EXISTS quizzes (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         course_id INT(11) DEFAULT NULL,
@@ -136,27 +118,24 @@ CREATE TABLE IF NOT EXISTS enrollments (
         CONSTRAINT quizzes_ibfk_1 FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
       );
 
-      -- --------------------------------------------------------
-      -- TABLE: quiz_questions
-      -- --------------------------------------------------------
+      -- Quiz Questions
       CREATE TABLE IF NOT EXISTS quiz_questions (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         quiz_id INT(11) DEFAULT NULL,
         question_text TEXT DEFAULT NULL,
         options LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (JSON_VALID(options)),
-        correct_answer VARCHAR(10) DEFAULT NULL,
+        correct_answer VARCHAR(50) DEFAULT NULL,
         KEY quiz_questions_ibfk_1 (quiz_id),
         CONSTRAINT quiz_questions_ibfk_1 FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
       );
 
-      -- --------------------------------------------------------
-      -- TABLE: quiz_attempts
-      -- --------------------------------------------------------
+      -- Quiz Attempts
       CREATE TABLE IF NOT EXISTS quiz_attempts (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         quiz_id INT(11) DEFAULT NULL,
         student_id INT(11) DEFAULT NULL,
-        score DECIMAL(5,2) DEFAULT NULL,
+        score DECIMAL(5,2) DEFAULT 0,
+        correct_count INT DEFAULT 0,
         attempt_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         start_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         answers LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (JSON_VALID(answers)),
@@ -166,9 +145,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
         CONSTRAINT quiz_attempts_ibfk_2 FOREIGN KEY (student_id) REFERENCES users(id)
       );
 
-      -- --------------------------------------------------------
-      -- TABLE: study_materials
-      -- --------------------------------------------------------
+      -- Study Materials
       CREATE TABLE IF NOT EXISTS study_materials (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         course_id INT(11) DEFAULT NULL,
@@ -180,9 +157,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
         CONSTRAINT study_materials_ibfk_1 FOREIGN KEY (course_id) REFERENCES courses(id)
       );
 
-      -- --------------------------------------------------------
-      -- TABLE: submissions
-      -- --------------------------------------------------------
+      -- Submissions
       CREATE TABLE IF NOT EXISTS submissions (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         assignment_id INT(11) DEFAULT NULL,
@@ -199,9 +174,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
         CONSTRAINT submissions_ibfk_2 FOREIGN KEY (student_id) REFERENCES users(id)
       );
 
-      -- --------------------------------------------------------
-      -- TABLE: system_logs
-      -- --------------------------------------------------------
+      -- System Logs
       CREATE TABLE IF NOT EXISTS system_logs (
         id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         user_id INT(11) DEFAULT NULL,
@@ -216,7 +189,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
     `;
 
     await pool.query(schemaAndSeed);
-    console.log('Database initialized: full schema applied and users seeded.');
+    console.log('Database initialized: full schema applied and seeded.');
   } catch (err) {
     console.error('DB Init Error:', err);
     process.exit(1);

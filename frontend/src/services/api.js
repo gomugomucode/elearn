@@ -454,6 +454,31 @@ export const fetchMyCourses = async () => {
   return res.data;
 };
 
+// ===================
+// STUDENT PROFILE APIs
+// ===================
+
+export const getStudentProfile = async () => {
+  const res = await fetch(`${API_BASE}/student/profile`, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`
+    }
+  });
+  return handleResponse(res);
+};
+
+export const updateStudentProfile = async (profile) => {
+  const res = await fetch(`${API_BASE}/student/profile`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`
+    },
+    body: JSON.stringify(profile),
+  });
+  return handleResponse(res);
+};
+
 
 // --------------------------------------------
 // COURSE DETAILS (materials, assignments, quizzes)

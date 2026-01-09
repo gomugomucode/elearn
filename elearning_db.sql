@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 06, 2026 at 12:26 PM
+-- Generation Time: Jan 09, 2026 at 08:41 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -138,8 +138,31 @@ CREATE TABLE `quiz_attempts` (
 --
 
 INSERT INTO `quiz_attempts` (`id`, `quiz_id`, `student_id`, `score`, `attempt_time`, `start_time`, `answers`) VALUES
-(1, 1, 103, 0.00, '2025-12-28 12:25:27', '2025-12-28 12:25:27', '{\"1\":\"paragraph\"}'),
-(2, 1, 103, 0.00, '2025-12-28 12:25:27', '2025-12-28 12:25:27', '{}');
+(1, 1, 103, 0.00, '2026-01-09 07:56:32', '2025-12-28 12:25:27', '{\"1\":\"portion \"}'),
+(2, 1, 103, 0.00, '2025-12-28 12:25:27', '2025-12-28 12:25:27', '{}'),
+(3, 1, 103, 0.00, '2026-01-09 19:23:04', '2026-01-09 19:23:04', '{}'),
+(4, 1, 103, 0.00, '2026-01-09 19:23:04', '2026-01-09 19:23:04', '{}'),
+(5, 1, 103, 0.00, '2026-01-09 19:25:06', '2026-01-09 19:25:06', '{}'),
+(6, 1, 103, 0.00, '2026-01-09 19:25:31', '2026-01-09 19:25:28', '{\"1\":\"paragraph\"}'),
+(7, 1, 103, 0.00, '2026-01-09 19:25:28', '2026-01-09 19:25:28', '{}'),
+(8, 1, 103, 0.00, '2026-01-09 19:25:44', '2026-01-09 19:25:44', '{}'),
+(9, 1, 103, 0.00, '2026-01-09 19:25:46', '2026-01-09 19:25:44', '{\"1\":\"programming\"}'),
+(10, 1, 103, 0.00, '2026-01-09 19:25:54', '2026-01-09 19:25:54', '{}'),
+(11, 1, 103, 0.00, '2026-01-09 19:25:56', '2026-01-09 19:25:54', '{\"1\":\"portion \"}'),
+(12, 1, 103, 0.00, '2026-01-09 19:26:03', '2026-01-09 19:26:03', '{}'),
+(13, 1, 103, 0.00, '2026-01-09 19:26:05', '2026-01-09 19:26:03', '{\"1\":\"parent class\"}'),
+(14, 1, 103, 0.00, '2026-01-09 19:26:13', '2026-01-09 19:26:13', '{}'),
+(15, 1, 103, 0.00, '2026-01-09 19:26:15', '2026-01-09 19:26:13', '{\"1\":\"paragraph\"}'),
+(16, 1, 103, 0.00, '2026-01-09 19:30:04', '2026-01-09 19:30:00', '{\"1\":\"programming\"}'),
+(17, 1, 103, 0.00, '2026-01-09 19:30:00', '2026-01-09 19:30:00', '{}'),
+(18, 1, 103, 0.00, '2026-01-09 19:30:12', '2026-01-09 19:30:12', '{}'),
+(19, 1, 103, 100.00, '2026-01-09 19:30:15', '2026-01-09 19:30:12', '{\"1\":\"portion \"}'),
+(20, 1, 103, 0.00, '2026-01-09 19:33:05', '2026-01-09 19:33:05', '{}'),
+(21, 1, 103, 100.00, '2026-01-09 19:33:07', '2026-01-09 19:33:05', '{\"1\":\"portion \"}'),
+(22, 1, 103, 0.00, '2026-01-09 19:39:53', '2026-01-09 19:39:53', '{}'),
+(23, 1, 103, 100.00, '2026-01-09 19:39:56', '2026-01-09 19:39:53', '{\"1\":\"portion \"}'),
+(24, 1, 103, 0.00, '2026-01-09 19:40:05', '2026-01-09 19:40:05', '{}'),
+(25, 1, 103, 0.00, '2026-01-09 19:40:07', '2026-01-09 19:40:05', '{\"1\":\"programming\"}');
 
 -- --------------------------------------------------------
 
@@ -160,7 +183,7 @@ CREATE TABLE `quiz_questions` (
 --
 
 INSERT INTO `quiz_questions` (`id`, `quiz_id`, `question_text`, `options`, `correct_answer`) VALUES
-(1, 1, 'What is p', '[\"portion \",\"programming\",\"paragraph\",\"parent class\"]', '2');
+(1, 1, 'What is p', '[\"portion \",\"programming\",\"paragraph\",\"parent class\"]', 'portion ');
 
 -- --------------------------------------------------------
 
@@ -194,6 +217,13 @@ CREATE TABLE `submissions` (
   `submitted_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `teacher_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `submissions`
+--
+
+INSERT INTO `submissions` (`id`, `assignment_id`, `student_id`, `file_url`, `status`, `grade`, `feedback`, `submitted_at`, `teacher_id`) VALUES
+(1, 1, 103, '1767701183333_425891353.pptx', 'graded', 50.00, 'improve the reference', '2026-01-06 12:06:23', 102);
 
 -- --------------------------------------------------------
 
@@ -342,7 +372,7 @@ ALTER TABLE `quizzes`
 -- AUTO_INCREMENT for table `quiz_attempts`
 --
 ALTER TABLE `quiz_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
@@ -360,7 +390,7 @@ ALTER TABLE `study_materials`
 -- AUTO_INCREMENT for table `submissions`
 --
 ALTER TABLE `submissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `system_logs`
