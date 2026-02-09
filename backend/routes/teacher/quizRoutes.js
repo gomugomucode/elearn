@@ -1,24 +1,13 @@
-const express = require('express');
-const router = express.Router();
-const authenticateToken = require('../../middleware/authMiddleware');
-const verifyRole = require('../../middleware/roleMiddleware');
+const router = require("express").Router();
+const quiz = require("../../controllers/teacher/quizController");
+// const auth = require("../middleware/authMiddleware");
+const auth = require("../../middleware/authMiddleware")
 
-const {
-  getTeacherQuizzes,
-  getTeacherQuizById,
-  createTeacherQuiz,
-  updateTeacherQuiz,
-  deleteTeacherQuiz
-} = require('../../controllers/teacher/quizController');
 
-// Only teachers can access these routes
-router.use(authenticateToken, verifyRole('teacher'));
-
-// Routes
-router.get('/', getTeacherQuizzes);             // Get all quizzes
-router.get('/:id', getTeacherQuizById);        // Get single quiz with questions
-router.post('/', createTeacherQuiz);           // Create new quiz
-router.put('/:id', updateTeacherQuiz);         // Update quiz & questions
-router.delete('/:id', deleteTeacherQuiz);      // Delete quiz
+router.get("/quizzes", auth, quiz.listTeacherQuizzes);
+router.post("/quizzes", auth, quiz.createTeacherQuiz);
+router.get("/quizzes/:id", auth, quiz.getTeacherQuizById);
+router.put("/quizzes/:id", auth, quiz.updateTeacherQuiz);
+router.delete("/quizzes/:id", auth, quiz.deleteTeacherQuiz);
 
 module.exports = router;

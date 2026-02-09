@@ -1,17 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const authenticateToken = require("../../middleware/authMiddleware");
+const router = require("express").Router();
+const quiz = require("../../controllers/student/quiz.controller");
+const auth = require("../../middleware/authMiddleware");
 
-const {
-  listQuizzes,
-  startQuiz,
-  submitQuiz,
-  getQuizResult
-} = require("../../controllers/student/quiz.controller");
-
-router.get("/", authenticateToken, listQuizzes);
-router.get("/start/:quizId", authenticateToken, startQuiz);
-router.post("/submit/:quizId", authenticateToken, submitQuiz);
-router.get("/result/:quizId", authenticateToken, getQuizResult);
+router.get("/", auth, quiz.listQuizzes);                 // GET /api/student/quiz
+router.get("/:quizId", auth, quiz.startQuiz);            // GET /api/student/quiz/:quizId
+router.post("/:quizId/submit", auth, quiz.submitQuiz);   // POST /api/student/quiz/:quizId/submit
+router.get("/result/:quizId", auth, quiz.getQuizResult); // GET /api/student/quiz/result/:quizId
 
 module.exports = router;

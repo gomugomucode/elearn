@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 09, 2026 at 08:41 PM
+-- Generation Time: Feb 09, 2026 at 03:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,7 +42,8 @@ CREATE TABLE `assignments` (
 --
 
 INSERT INTO `assignments` (`id`, `course_id`, `title`, `description`, `due_date`, `created_at`, `teacher_id`) VALUES
-(1, 1, 'Web Hooks 1', 'Explainthe tags', '2025-12-31 00:00:00', '2025-12-27 13:37:53', 102);
+(1, 1, 'Web Hooks 1', 'Explainthe tags', '2025-12-31 00:00:00', '2025-12-27 13:37:53', 102),
+(2, 5, 'XXsacasfsa', 'dsafcasfasd', '2026-02-11 00:00:00', '2026-02-09 14:28:19', 102);
 
 -- --------------------------------------------------------
 
@@ -68,7 +69,9 @@ CREATE TABLE `courses` (
 INSERT INTO `courses` (`id`, `title`, `description`, `teacher_id`, `created_at`, `status`, `thumbnail`, `course_image`) VALUES
 (1, 'Web Development', 'Web development is\r\nthe process of creating, building, and maintaining websites and web applications that run on the internet. It involves a mix of technical skills, programming languages, and creative problem-solving to ensure a site is functional, visually appealing, and provides a smooth user experience across various devices. \r\nKey Areas of Web Development\r\nWeb development is generally categorized into three main specializations: \r\n\r\n    Front-End Development: Focuses on the \"client-side,\" or what the user sees and interacts with in their web browser. Front-end developers use core technologies to translate design mockups into functional user interfaces.\r\n    Back-End Development: Deals with the \"server-side\" logic, databases, and application functionality that users do not see. Back-end developers manage data storage, user authentication, and ensure the performance and security of the application.\r\n    Full-Stack Development: Encompasses both front-end and back-end development. Full-stack developers have the skills to handle all aspects of a web application\'s creation from start to finish. \r\n\r\nCore Technologies and Languages\r\nThe foundation of web development rests on three core technologies, with additional languages and tools used depending on the specialization: \r\nArea \r\n	Core/Common Languages and Technologies\r\nFront-End	HTML, CSS, JavaScript, React, Angular, Vue.js, Bootstrap\r\nBack-End	Python, PHP, Ruby, Java, Node.js, C#, SQL, MongoDB\r\nTools	Git/GitHub (version control), Visual Studio Code (IDE), Figma (design), CodePen (online editor)\r\nThe Web Development Process\r\nThe typical lifecycle for developing a website or application involves several key stages: \r\n\r\n    Planning and Strategy: Defining project goals, target audience, and creating a sitemap and wireframes (a basic blueprint of the site).\r\n    Design: Focusing on the visual aesthetics, user interface (UI), and user experience (UX) design.\r\n    Content Creation: Developing engaging and relevant text, images, and other media for the site.\r\n    Development (Coding): Translating the design and functionality requirements into actual code using the appropriate programming languages and frameworks.\r\n    Testing and Launch: Performing quality assurance (QA) testing for functionality, compatibility, and performance across different browsers and devices before deploying the site to a live server.\r\n    Maintenance and Updating: Ongoing monitoring of the website\'s performance, applying security patches, updating content, and making adjustments based on user feedback. \r\n\r\nCareer Outlook\r\nWeb development is a strong career choice with growing demand and competitive salaries. The U.S. Bureau of Labor Statistics projects employment for web developers to grow much faster than the average for all occupations. Individuals can enter the field through various paths, including self-taught learning with online resources like W3Schools or MDN Web Docs, coding bootcamps, or formal degrees in computer science. \r\n', 102, '2025-12-27 13:37:24', 'Active', '1766842644056_how-spaces-works3.png', '1766842644060_how-spaces-works3.png'),
 (2, 'asadsd', 'afdfdfdsfdd', 102, '2025-12-28 10:18:49', 'Active', '1766917128887_anime-landscape-person-traveling.jpg', '1766917129161_anime-landscape-person-traveling.jpg'),
-(3, 'rqrwerwef', 'sfsddtrth', 102, '2025-12-28 12:34:11', 'Active', '1766925251482_Systemflowchart.jpg', '1766925251486_Systemflowchart.jpg');
+(3, 'rqrwerwef', 'sfsddtrth', 102, '2025-12-28 12:34:11', 'Active', '1766925251482_Systemflowchart.jpg', '1766925251486_Systemflowchart.jpg'),
+(4, 'asdasdsads', 'sdasfasfsadssss', 102, '2026-01-30 14:16:32', 'Active', '1769782592604_Gemini_Generated_Image_q6hr2dq6hr2dq6hr.png', '1769782592747_screencapture-chatgpt-c-69723491-19c8-8323-b74a-9954eb7ff557-2026-01-24-15_00_50-2.png'),
+(5, 'adsdsfsc23242', 'fscxxsdsfvjh  2423 523 53', 102, '2026-02-09 14:28:05', 'Active', '1770647285014_9RISSE1YjsnIXT5m2T5qSnbm1-aswFDBOf1hE3vMdIcrizIFfvNwqd9bbbdtMMDHHL0RhcAOdPbSmlQJdvlcN-hWd0o_PAQJnDRHetDOKt4.jpg', '1770647285026_9RISSE1YjsnIXT5m2T5qSnbm1-aswFDBOf1hE3vMdIcrizIFfvNwqd9bbbdtMMDHHL0RhcAOdPbSmlQJdvlcN-hWd0o_PAQJnDRHetDOKt4.jpg');
 
 -- --------------------------------------------------------
 
@@ -92,7 +95,8 @@ CREATE TABLE `enrollments` (
 INSERT INTO `enrollments` (`id`, `student_id`, `course_id`, `enrolled_at`, `thumbnail`, `course_image`) VALUES
 (1, 103, 1, '2025-12-27 13:38:59', '1766842644056_how-spaces-works3.png', '1766842644060_how-spaces-works3.png'),
 (2, 103, 3, '2025-12-28 12:34:36', NULL, NULL),
-(3, 103, 2, '2025-12-28 12:40:57', NULL, NULL);
+(3, 103, 2, '2025-12-28 12:40:57', NULL, NULL),
+(4, 103, 4, '2026-01-30 14:17:13', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -115,7 +119,8 @@ CREATE TABLE `quizzes` (
 --
 
 INSERT INTO `quizzes` (`id`, `course_id`, `title`, `time_limit`, `created_at`, `teacher_id`, `is_active`) VALUES
-(1, 1, 'Web devlopment chapter 1 ', 10, '2025-12-27 13:38:34', 102, 1);
+(1, 1, 'Web devlopment chapter 1 ', 10, '2025-12-27 13:38:34', 102, 1),
+(2, 2, 'adklsaslakf', 10, '2026-01-29 15:09:06', 102, 1);
 
 -- --------------------------------------------------------
 
@@ -130,39 +135,80 @@ CREATE TABLE `quiz_attempts` (
   `score` decimal(5,2) DEFAULT NULL,
   `attempt_time` timestamp NOT NULL DEFAULT current_timestamp(),
   `start_time` timestamp NOT NULL DEFAULT current_timestamp(),
-  `answers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`answers`))
+  `answers` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`answers`)),
+  `correct_count` int(11) DEFAULT 0,
+  `total_questions` int(11) DEFAULT 0,
+  `score_percent` decimal(5,2) DEFAULT 0.00,
+  `submitted_at` timestamp NULL DEFAULT NULL,
+  `is_submitted` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `quiz_attempts`
 --
 
-INSERT INTO `quiz_attempts` (`id`, `quiz_id`, `student_id`, `score`, `attempt_time`, `start_time`, `answers`) VALUES
-(1, 1, 103, 0.00, '2026-01-09 07:56:32', '2025-12-28 12:25:27', '{\"1\":\"portion \"}'),
-(2, 1, 103, 0.00, '2025-12-28 12:25:27', '2025-12-28 12:25:27', '{}'),
-(3, 1, 103, 0.00, '2026-01-09 19:23:04', '2026-01-09 19:23:04', '{}'),
-(4, 1, 103, 0.00, '2026-01-09 19:23:04', '2026-01-09 19:23:04', '{}'),
-(5, 1, 103, 0.00, '2026-01-09 19:25:06', '2026-01-09 19:25:06', '{}'),
-(6, 1, 103, 0.00, '2026-01-09 19:25:31', '2026-01-09 19:25:28', '{\"1\":\"paragraph\"}'),
-(7, 1, 103, 0.00, '2026-01-09 19:25:28', '2026-01-09 19:25:28', '{}'),
-(8, 1, 103, 0.00, '2026-01-09 19:25:44', '2026-01-09 19:25:44', '{}'),
-(9, 1, 103, 0.00, '2026-01-09 19:25:46', '2026-01-09 19:25:44', '{\"1\":\"programming\"}'),
-(10, 1, 103, 0.00, '2026-01-09 19:25:54', '2026-01-09 19:25:54', '{}'),
-(11, 1, 103, 0.00, '2026-01-09 19:25:56', '2026-01-09 19:25:54', '{\"1\":\"portion \"}'),
-(12, 1, 103, 0.00, '2026-01-09 19:26:03', '2026-01-09 19:26:03', '{}'),
-(13, 1, 103, 0.00, '2026-01-09 19:26:05', '2026-01-09 19:26:03', '{\"1\":\"parent class\"}'),
-(14, 1, 103, 0.00, '2026-01-09 19:26:13', '2026-01-09 19:26:13', '{}'),
-(15, 1, 103, 0.00, '2026-01-09 19:26:15', '2026-01-09 19:26:13', '{\"1\":\"paragraph\"}'),
-(16, 1, 103, 0.00, '2026-01-09 19:30:04', '2026-01-09 19:30:00', '{\"1\":\"programming\"}'),
-(17, 1, 103, 0.00, '2026-01-09 19:30:00', '2026-01-09 19:30:00', '{}'),
-(18, 1, 103, 0.00, '2026-01-09 19:30:12', '2026-01-09 19:30:12', '{}'),
-(19, 1, 103, 100.00, '2026-01-09 19:30:15', '2026-01-09 19:30:12', '{\"1\":\"portion \"}'),
-(20, 1, 103, 0.00, '2026-01-09 19:33:05', '2026-01-09 19:33:05', '{}'),
-(21, 1, 103, 100.00, '2026-01-09 19:33:07', '2026-01-09 19:33:05', '{\"1\":\"portion \"}'),
-(22, 1, 103, 0.00, '2026-01-09 19:39:53', '2026-01-09 19:39:53', '{}'),
-(23, 1, 103, 100.00, '2026-01-09 19:39:56', '2026-01-09 19:39:53', '{\"1\":\"portion \"}'),
-(24, 1, 103, 0.00, '2026-01-09 19:40:05', '2026-01-09 19:40:05', '{}'),
-(25, 1, 103, 0.00, '2026-01-09 19:40:07', '2026-01-09 19:40:05', '{\"1\":\"programming\"}');
+INSERT INTO `quiz_attempts` (`id`, `quiz_id`, `student_id`, `score`, `attempt_time`, `start_time`, `answers`, `correct_count`, `total_questions`, `score_percent`, `submitted_at`, `is_submitted`) VALUES
+(1, 1, 103, 0.00, '2026-01-09 07:56:32', '2025-12-28 12:25:27', '{\"1\":\"portion \"}', 0, 0, 0.00, NULL, 0),
+(2, 1, 103, 0.00, '2025-12-28 12:25:27', '2025-12-28 12:25:27', '{}', 0, 0, 0.00, NULL, 0),
+(3, 1, 103, 0.00, '2026-01-09 19:23:04', '2026-01-09 19:23:04', '{}', 0, 0, 0.00, NULL, 0),
+(4, 1, 103, 0.00, '2026-01-09 19:23:04', '2026-01-09 19:23:04', '{}', 0, 0, 0.00, NULL, 0),
+(5, 1, 103, 0.00, '2026-01-09 19:25:06', '2026-01-09 19:25:06', '{}', 0, 0, 0.00, NULL, 0),
+(6, 1, 103, 0.00, '2026-01-09 19:25:31', '2026-01-09 19:25:28', '{\"1\":\"paragraph\"}', 0, 0, 0.00, NULL, 0),
+(7, 1, 103, 0.00, '2026-01-09 19:25:28', '2026-01-09 19:25:28', '{}', 0, 0, 0.00, NULL, 0),
+(8, 1, 103, 0.00, '2026-01-09 19:25:44', '2026-01-09 19:25:44', '{}', 0, 0, 0.00, NULL, 0),
+(9, 1, 103, 0.00, '2026-01-09 19:25:46', '2026-01-09 19:25:44', '{\"1\":\"programming\"}', 0, 0, 0.00, NULL, 0),
+(10, 1, 103, 0.00, '2026-01-09 19:25:54', '2026-01-09 19:25:54', '{}', 0, 0, 0.00, NULL, 0),
+(11, 1, 103, 0.00, '2026-01-09 19:25:56', '2026-01-09 19:25:54', '{\"1\":\"portion \"}', 0, 0, 0.00, NULL, 0),
+(12, 1, 103, 0.00, '2026-01-09 19:26:03', '2026-01-09 19:26:03', '{}', 0, 0, 0.00, NULL, 0),
+(13, 1, 103, 0.00, '2026-01-09 19:26:05', '2026-01-09 19:26:03', '{\"1\":\"parent class\"}', 0, 0, 0.00, NULL, 0),
+(14, 1, 103, 0.00, '2026-01-09 19:26:13', '2026-01-09 19:26:13', '{}', 0, 0, 0.00, NULL, 0),
+(15, 1, 103, 0.00, '2026-01-09 19:26:15', '2026-01-09 19:26:13', '{\"1\":\"paragraph\"}', 0, 0, 0.00, NULL, 0),
+(16, 1, 103, 0.00, '2026-01-09 19:30:04', '2026-01-09 19:30:00', '{\"1\":\"programming\"}', 0, 0, 0.00, NULL, 0),
+(17, 1, 103, 0.00, '2026-01-09 19:30:00', '2026-01-09 19:30:00', '{}', 0, 0, 0.00, NULL, 0),
+(18, 1, 103, 0.00, '2026-01-09 19:30:12', '2026-01-09 19:30:12', '{}', 0, 0, 0.00, NULL, 0),
+(19, 1, 103, 100.00, '2026-01-09 19:30:15', '2026-01-09 19:30:12', '{\"1\":\"portion \"}', 0, 0, 0.00, NULL, 0),
+(20, 1, 103, 0.00, '2026-01-09 19:33:05', '2026-01-09 19:33:05', '{}', 0, 0, 0.00, NULL, 0),
+(21, 1, 103, 100.00, '2026-01-09 19:33:07', '2026-01-09 19:33:05', '{\"1\":\"portion \"}', 0, 0, 0.00, NULL, 0),
+(22, 1, 103, 0.00, '2026-01-09 19:39:53', '2026-01-09 19:39:53', '{}', 0, 0, 0.00, NULL, 0),
+(23, 1, 103, 100.00, '2026-01-09 19:39:56', '2026-01-09 19:39:53', '{\"1\":\"portion \"}', 0, 0, 0.00, NULL, 0),
+(24, 1, 103, 0.00, '2026-01-09 19:40:05', '2026-01-09 19:40:05', '{}', 0, 0, 0.00, NULL, 0),
+(25, 1, 103, 0.00, '2026-01-09 19:40:07', '2026-01-09 19:40:05', '{\"1\":\"programming\"}', 0, 0, 0.00, NULL, 0),
+(26, 1, 103, 0.00, '2026-01-29 15:08:07', '2026-01-29 15:08:07', '{}', 0, 0, 0.00, NULL, 0),
+(27, 1, 103, 0.00, '2026-01-29 15:08:10', '2026-01-29 15:08:07', '{\"1\":\"programming\"}', 0, 0, 0.00, NULL, 0),
+(28, 1, 103, 0.00, '2026-01-29 15:08:16', '2026-01-29 15:08:16', '{}', 0, 0, 0.00, NULL, 0),
+(29, 1, 103, 100.00, '2026-01-29 15:08:19', '2026-01-29 15:08:16', '{\"1\":\"portion \"}', 0, 0, 0.00, NULL, 0),
+(30, 2, 103, 0.00, '2026-01-29 15:09:26', '2026-01-29 15:09:26', '{}', 0, 0, 0.00, NULL, 0),
+(31, 2, 103, 0.00, '2026-01-29 15:09:31', '2026-01-29 15:09:26', '{\"2\":\"afasf\"}', 0, 0, 0.00, NULL, 0),
+(32, 2, 103, 0.00, '2026-01-29 15:09:37', '2026-01-29 15:09:37', '{}', 0, 0, 0.00, NULL, 0),
+(33, 2, 103, 0.00, '2026-01-29 15:09:39', '2026-01-29 15:09:37', '{\"2\":\"safasf\"}', 0, 0, 0.00, NULL, 0),
+(34, 2, 103, 0.00, '2026-01-29 15:09:46', '2026-01-29 15:09:46', '{}', 0, 0, 0.00, NULL, 0),
+(35, 2, 103, 0.00, '2026-01-29 15:09:48', '2026-01-29 15:09:46', '{\"2\":\"assssfsf\"}', 0, 0, 0.00, NULL, 0),
+(36, 2, 103, 0.00, '2026-01-29 15:09:55', '2026-01-29 15:09:55', '{}', 0, 0, 0.00, NULL, 0),
+(37, 2, 103, 0.00, '2026-01-29 15:09:57', '2026-01-29 15:09:55', '{\"2\":\"safsa\"}', 0, 0, 0.00, NULL, 0),
+(38, 2, 103, 0.00, '2026-01-29 15:28:18', '2026-01-29 15:28:18', '{}', 0, 0, 0.00, NULL, 0),
+(39, 2, 103, 0.00, '2026-01-29 15:28:21', '2026-01-29 15:28:18', '{\"2\":\"afasf\"}', 0, 0, 0.00, NULL, 0),
+(40, 2, 103, 0.00, '2026-01-29 15:28:28', '2026-01-29 15:28:28', '{}', 0, 0, 0.00, NULL, 0),
+(41, 2, 103, 0.00, '2026-01-29 15:44:34', '2026-01-29 15:28:28', '{}', 0, 0, 0.00, NULL, 0),
+(42, 2, 103, 0.00, '2026-01-31 16:56:32', '2026-01-31 16:56:29', '{\"2\":\"safsa\"}', 0, 0, 0.00, NULL, 0),
+(43, 2, 103, 0.00, '2026-01-31 16:56:29', '2026-01-31 16:56:29', '{}', 0, 0, 0.00, NULL, 0),
+(44, 1, 103, 0.00, '2026-02-09 13:28:56', '2026-02-09 13:28:56', '{}', 0, 0, 0.00, NULL, 0),
+(45, 1, 103, 0.00, '2026-02-09 13:28:58', '2026-02-09 13:28:56', '{\"1\":\"programming\"}', 0, 0, 0.00, NULL, 0),
+(46, 1, 103, NULL, '2026-02-09 14:27:18', '2026-02-09 14:27:18', '{}', 0, 1, 0.00, NULL, 0),
+(47, 1, 103, NULL, '2026-02-09 14:27:21', '2026-02-09 14:27:18', '{\"1\":\"programming\"}', 0, 1, 0.00, '2026-02-09 14:27:21', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_attempt_answers`
+--
+
+CREATE TABLE `quiz_attempt_answers` (
+  `id` int(11) NOT NULL,
+  `attempt_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `selected_index` int(11) NOT NULL,
+  `is_correct` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -175,7 +221,7 @@ CREATE TABLE `quiz_questions` (
   `quiz_id` int(11) DEFAULT NULL,
   `question_text` text DEFAULT NULL,
   `options` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`options`)),
-  `correct_answer` varchar(10) DEFAULT NULL
+  `correct_answer` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -183,7 +229,8 @@ CREATE TABLE `quiz_questions` (
 --
 
 INSERT INTO `quiz_questions` (`id`, `quiz_id`, `question_text`, `options`, `correct_answer`) VALUES
-(1, 1, 'What is p', '[\"portion \",\"programming\",\"paragraph\",\"parent class\"]', 'portion ');
+(1, 1, 'What is p', '[\"portion \",\"programming\",\"paragraph\",\"parent class\"]', 0),
+(2, 2, 'asdasfsafsaf', '[\"safsa\",\"assssfsf\",\"safasf\",\"afasf\"]', 3);
 
 -- --------------------------------------------------------
 
@@ -305,6 +352,14 @@ ALTER TABLE `quiz_attempts`
   ADD KEY `quiz_attempts_ibfk_1` (`quiz_id`);
 
 --
+-- Indexes for table `quiz_attempt_answers`
+--
+ALTER TABLE `quiz_attempt_answers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_attempt_question` (`attempt_id`,`question_id`),
+  ADD KEY `question_id` (`question_id`);
+
+--
 -- Indexes for table `quiz_questions`
 --
 ALTER TABLE `quiz_questions`
@@ -348,37 +403,43 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `assignments`
 --
 ALTER TABLE `assignments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `enrollments`
 --
 ALTER TABLE `enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `quizzes`
 --
 ALTER TABLE `quizzes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `quiz_attempts`
 --
 ALTER TABLE `quiz_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+
+--
+-- AUTO_INCREMENT for table `quiz_attempt_answers`
+--
+ALTER TABLE `quiz_attempt_answers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
 --
 ALTER TABLE `quiz_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `study_materials`
@@ -439,6 +500,13 @@ ALTER TABLE `quizzes`
 ALTER TABLE `quiz_attempts`
   ADD CONSTRAINT `quiz_attempts_ibfk_1` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `quiz_attempts_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `quiz_attempt_answers`
+--
+ALTER TABLE `quiz_attempt_answers`
+  ADD CONSTRAINT `quiz_attempt_answers_ibfk_1` FOREIGN KEY (`attempt_id`) REFERENCES `quiz_attempts` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `quiz_attempt_answers_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `quiz_questions` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `quiz_questions`

@@ -10,15 +10,15 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [attemptId, setAttemptId] = useState(null); // ✅ store attemptId
+  const [attemptId, setAttemptId] = useState(null);
 
-  // 1️⃣ Start quiz + initialize timer
+  // Start quiz
   useEffect(() => {
-    api.get(`/student/quiz/start/${quizId}`)
+    api.get(`/student/quiz/${quizId}`)
       .then(res => {
         setQuiz(res.data.quiz);
-        setTimeLeft(res.data.quiz.time_limit * 60); // minutes → seconds
-        setAttemptId(res.data.attemptId); // ✅ save attemptId
+        setTimeLeft((res.data.quiz.time_limit || 0) * 60);
+        setAttemptId(res.data.attemptId);
       })
       .catch(err => {
         console.error(err);
@@ -26,41 +26,35 @@ export default function QuizPage() {
       });
   }, [quizId]);
 
-  // 2️⃣ Countdown timer
+  // Timer
   useEffect(() => {
     if (timeLeft === null || submitting) return;
 
     if (timeLeft <= 0) {
-      handleSubmit(true); // auto-submit when time over
+      handleSubmit(true);
       return;
     }
 
-    const timer = setInterval(() => {
-      setTimeLeft(t => t - 1);
-    }, 1000);
-
+    const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
     return () => clearInterval(timer);
   }, [timeLeft, submitting]);
 
-  // 3️⃣ Submit quiz (manual or auto)
   const handleSubmit = async (auto = false) => {
     if (submitting) return;
-
     if (!attemptId) {
-      alert("Quiz session expired. Please restart the quiz.");
+      alert("Quiz session expired. Please restart.");
       return;
     }
 
     setSubmitting(true);
 
     try {
-      await api.post(`/student/quiz/submit/${quizId}`, {
+      await api.post(`/student/quiz/${quizId}/submit`, {
+        attemptId,
         answers,
-        attemptId, // ✅ send attemptId
       });
 
       if (!auto) alert("Quiz submitted successfully.");
-
       navigate(`/student/quiz/result/${quizId}`);
     } catch (err) {
       console.error(err);
@@ -71,8 +65,8 @@ export default function QuizPage() {
 
   if (!quiz) return <p className="p-6">Loading quiz...</p>;
 
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
+  const minutes = Math.floor((timeLeft || 0) / 60);
+  const seconds = (timeLeft || 0) % 60;
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
@@ -85,19 +79,17 @@ export default function QuizPage() {
       {quiz.questions.map((q, i) => (
         <div key={q.id} className="mb-4 border p-4 rounded">
           <p className="font-semibold">
-            {i + 1}. {q.question}
+            {i + 1}. {q.question_text}
           </p>
 
-          {q.options.map(opt => (
-            <label key={opt} className="block mt-1">
+          {q.options.map((opt, idx) => (
+            <label key={idx} className="block mt-1">
               <input
                 type="radio"
-                name={q.id}
-                value={opt}
+                name={`q_${q.id}`}
+                checked={answers[q.id] === idx}
                 disabled={timeLeft <= 0}
-                onChange={() =>
-                  setAnswers(prev => ({ ...prev, [q.id]: opt }))
-                }
+                onChange={() => setAnswers(prev => ({ ...prev, [q.id]: idx }))}
               />
               <span className="ml-2">{opt}</span>
             </label>

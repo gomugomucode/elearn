@@ -50,8 +50,9 @@ const studentCourseDetailRoutes = require("./routes/student/course.routes");
 app.use("/api/student/course", auth, studentCourseDetailRoutes);
 
 // Teacher Quiz routes
-const teacherQuizRoutes = require('./routes/teacher/quizRoutes'); // updated routes
-app.use('/api/teacher/quizzes', teacherQuizRoutes);
+app.use("/api/teacher", require("./routes/teacher/quizRoutes"));
+
+
 
 const userRoutes = require("./routes/userRoutes");
 app.use("/api", userRoutes);
