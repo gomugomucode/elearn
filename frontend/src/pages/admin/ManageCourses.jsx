@@ -58,7 +58,7 @@ const ManageCourses = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teacher</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enrollments</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th> */}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -77,10 +77,10 @@ const ManageCourses = () => {
                       course.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                     }`}>{course.status || 'Inactive'}</span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                  {/* <td className="px-6 py-4 whitespace-nowrap space-x-2">
                     <button onClick={() => handleEdit(course)} className="text-blue-600 hover:text-blue-900">Edit</button>
                     <button onClick={() => handleDelete(course.id)} className="text-red-600 hover:text-red-900">Delete</button>
-                  </td>
+                  </td> */}
                 </tr>
               ))
             )}

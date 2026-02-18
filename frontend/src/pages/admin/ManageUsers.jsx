@@ -104,9 +104,11 @@ Jane Smith,jane@example.com,pass123,teacher`;
       alert("User created!");
       setShowAddModal(false);
       fetchUsers();
-    } catch {
-      alert("Error creating user");
+    } catch (err) {
+      console.error(err);
+      alert(err?.response?.data?.message || "Error creating user");
     }
+
   };
 
   // ---------------- Edit User ----------------

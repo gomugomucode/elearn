@@ -12,8 +12,20 @@ const {
   getAllUsers,
   getAllCourses,
   getUserProfileById,
-  updateUser
+  updateUser,
+  createUser, // ✅ add this
+  updateCourse,
+  deleteCourse,
 } = require('../controllers/adminController');
+
+
+router.post(
+  '/users',
+  authenticateToken,
+  verifyRole('admin'),
+  createUser
+);
+
 
 
 router.put(
@@ -50,6 +62,9 @@ router.get('/dashboard', authenticateToken, verifyRole('admin'), getDashboardSta
 router.get('/users', authenticateToken, verifyRole('admin'), getAllUsers);
 router.get('/courses', authenticateToken, verifyRole('admin'), getAllCourses);
 router.get('/profile/:id', authenticateToken, verifyRole('admin'), getUserProfileById);
+router.put('/courses/:id', authenticateToken, verifyRole('admin'), updateCourse);
+router.delete('/courses/:id', authenticateToken, verifyRole('admin'), deleteCourse);
+
 
 
 // const profileRoutes = require('./admin/profileRoutes');
