@@ -43,17 +43,17 @@ export default function CourseDetail() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Header */}
-   {/* Hero Header - Clean version without background */}
-<div className="max-w-7xl mx-auto px-6 py-10">
-  <button
-    onClick={() => navigate(-1)}
-    className="mb-4 text-gray-600 hover:text-gray-900 flex items-center gap-2 transition"
-  >
-    ← Back to Courses
-  </button>
-  <h1 className="text-4xl md:text-5xl font-bold mb-2 text-gray-900">{course.title}</h1>
-  <p className="text-lg text-gray-700 max-w-3xl">{course.description}</p>
-</div>
+      {/* Hero Header - Clean version without background */}
+      <div className="max-w-7xl mx-auto px-6 py-10">
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-4 text-gray-600 hover:text-gray-900 flex items-center gap-2 transition"
+        >
+          ← Back to Courses
+        </button>
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 text-gray-900">{course.title}</h1>
+        <p className="text-lg text-gray-700 max-w-3xl">{course.description}</p>
+      </div>
 
 
 
@@ -66,21 +66,19 @@ export default function CourseDetail() {
             <div className="flex border-b border-gray-300 mb-8">
               <button
                 onClick={() => setActiveTab("assignments")}
-                className={`px-6 py-3 font-medium transition ${
-                  activeTab === "assignments"
+                className={`px-6 py-3 font-medium transition ${activeTab === "assignments"
                     ? "text-blue-600 border-b-4 border-blue-600"
                     : "text-gray-600 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 Assignments ({course.assignments.length})
               </button>
               <button
                 onClick={() => setActiveTab("quizzes")}
-                className={`px-6 py-3 font-medium transition ${
-                  activeTab === "quizzes"
+                className={`px-6 py-3 font-medium transition ${activeTab === "quizzes"
                     ? "text-green-600 border-b-4 border-green-600"
                     : "text-gray-600 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 Quizzes ({course.quizzes.length})
               </button>
@@ -164,10 +162,15 @@ export default function CourseDetail() {
                 </div>
                 <div className="pt-4">
                   <p className="text-sm text-gray-600 mb-2">Overall Progress</p>
+
                   <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div className="bg-indigo-600 h-3 rounded-full w-45"></div>
+                    <div
+                      className="bg-indigo-600 h-3 rounded-full"
+                      style={{ width: `${course.progress || 0}%` }}
+                    />
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">45% Complete</p>
+
+                  <p className="text-sm text-gray-600 mt-1">{course.progress || 0}% Complete</p>
                 </div>
               </div>
             </div>

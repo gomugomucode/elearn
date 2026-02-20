@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 09, 2026 at 03:32 PM
+-- Generation Time: Feb 20, 2026 at 10:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `assignments` (
 
 INSERT INTO `assignments` (`id`, `course_id`, `title`, `description`, `due_date`, `created_at`, `teacher_id`) VALUES
 (1, 1, 'Web Hooks 1', 'Explainthe tags', '2025-12-31 00:00:00', '2025-12-27 13:37:53', 102),
-(2, 5, 'XXsacasfsa', 'dsafcasfasd', '2026-02-11 00:00:00', '2026-02-09 14:28:19', 102);
+(4, 6, 'sfasfas', 'fasfasfasf', '2026-02-21 00:00:00', '2026-02-09 19:11:39', 102);
 
 -- --------------------------------------------------------
 
@@ -68,10 +68,7 @@ CREATE TABLE `courses` (
 
 INSERT INTO `courses` (`id`, `title`, `description`, `teacher_id`, `created_at`, `status`, `thumbnail`, `course_image`) VALUES
 (1, 'Web Development', 'Web development is\r\nthe process of creating, building, and maintaining websites and web applications that run on the internet. It involves a mix of technical skills, programming languages, and creative problem-solving to ensure a site is functional, visually appealing, and provides a smooth user experience across various devices. \r\nKey Areas of Web Development\r\nWeb development is generally categorized into three main specializations: \r\n\r\n    Front-End Development: Focuses on the \"client-side,\" or what the user sees and interacts with in their web browser. Front-end developers use core technologies to translate design mockups into functional user interfaces.\r\n    Back-End Development: Deals with the \"server-side\" logic, databases, and application functionality that users do not see. Back-end developers manage data storage, user authentication, and ensure the performance and security of the application.\r\n    Full-Stack Development: Encompasses both front-end and back-end development. Full-stack developers have the skills to handle all aspects of a web application\'s creation from start to finish. \r\n\r\nCore Technologies and Languages\r\nThe foundation of web development rests on three core technologies, with additional languages and tools used depending on the specialization: \r\nArea \r\n	Core/Common Languages and Technologies\r\nFront-End	HTML, CSS, JavaScript, React, Angular, Vue.js, Bootstrap\r\nBack-End	Python, PHP, Ruby, Java, Node.js, C#, SQL, MongoDB\r\nTools	Git/GitHub (version control), Visual Studio Code (IDE), Figma (design), CodePen (online editor)\r\nThe Web Development Process\r\nThe typical lifecycle for developing a website or application involves several key stages: \r\n\r\n    Planning and Strategy: Defining project goals, target audience, and creating a sitemap and wireframes (a basic blueprint of the site).\r\n    Design: Focusing on the visual aesthetics, user interface (UI), and user experience (UX) design.\r\n    Content Creation: Developing engaging and relevant text, images, and other media for the site.\r\n    Development (Coding): Translating the design and functionality requirements into actual code using the appropriate programming languages and frameworks.\r\n    Testing and Launch: Performing quality assurance (QA) testing for functionality, compatibility, and performance across different browsers and devices before deploying the site to a live server.\r\n    Maintenance and Updating: Ongoing monitoring of the website\'s performance, applying security patches, updating content, and making adjustments based on user feedback. \r\n\r\nCareer Outlook\r\nWeb development is a strong career choice with growing demand and competitive salaries. The U.S. Bureau of Labor Statistics projects employment for web developers to grow much faster than the average for all occupations. Individuals can enter the field through various paths, including self-taught learning with online resources like W3Schools or MDN Web Docs, coding bootcamps, or formal degrees in computer science. \r\n', 102, '2025-12-27 13:37:24', 'Active', '1766842644056_how-spaces-works3.png', '1766842644060_how-spaces-works3.png'),
-(2, 'asadsd', 'afdfdfdsfdd', 102, '2025-12-28 10:18:49', 'Active', '1766917128887_anime-landscape-person-traveling.jpg', '1766917129161_anime-landscape-person-traveling.jpg'),
-(3, 'rqrwerwef', 'sfsddtrth', 102, '2025-12-28 12:34:11', 'Active', '1766925251482_Systemflowchart.jpg', '1766925251486_Systemflowchart.jpg'),
-(4, 'asdasdsads', 'sdasfasfsadssss', 102, '2026-01-30 14:16:32', 'Active', '1769782592604_Gemini_Generated_Image_q6hr2dq6hr2dq6hr.png', '1769782592747_screencapture-chatgpt-c-69723491-19c8-8323-b74a-9954eb7ff557-2026-01-24-15_00_50-2.png'),
-(5, 'adsdsfsc23242', 'fscxxsdsfvjh  2423 523 53', 102, '2026-02-09 14:28:05', 'Active', '1770647285014_9RISSE1YjsnIXT5m2T5qSnbm1-aswFDBOf1hE3vMdIcrizIFfvNwqd9bbbdtMMDHHL0RhcAOdPbSmlQJdvlcN-hWd0o_PAQJnDRHetDOKt4.jpg', '1770647285026_9RISSE1YjsnIXT5m2T5qSnbm1-aswFDBOf1hE3vMdIcrizIFfvNwqd9bbbdtMMDHHL0RhcAOdPbSmlQJdvlcN-hWd0o_PAQJnDRHetDOKt4.jpg');
+(6, 'sdsadsa', 'asfsafsafsa', 102, '2026-02-09 19:11:02', 'Active', '1770664262441_WhatsApp_Image_2026-02-01_at_7.32.46_PM.jpeg', '1770664262445_Screenshot_2026-01-30_at_22-09-02_Chapter_0.1_The_Black_Swordsman_-_Berserk.png');
 
 -- --------------------------------------------------------
 
@@ -94,9 +91,7 @@ CREATE TABLE `enrollments` (
 
 INSERT INTO `enrollments` (`id`, `student_id`, `course_id`, `enrolled_at`, `thumbnail`, `course_image`) VALUES
 (1, 103, 1, '2025-12-27 13:38:59', '1766842644056_how-spaces-works3.png', '1766842644060_how-spaces-works3.png'),
-(2, 103, 3, '2025-12-28 12:34:36', NULL, NULL),
-(3, 103, 2, '2025-12-28 12:40:57', NULL, NULL),
-(4, 103, 4, '2026-01-30 14:17:13', NULL, NULL);
+(5, 103, 6, '2026-02-09 19:12:54', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -120,7 +115,7 @@ CREATE TABLE `quizzes` (
 
 INSERT INTO `quizzes` (`id`, `course_id`, `title`, `time_limit`, `created_at`, `teacher_id`, `is_active`) VALUES
 (1, 1, 'Web devlopment chapter 1 ', 10, '2025-12-27 13:38:34', 102, 1),
-(2, 2, 'adklsaslakf', 10, '2026-01-29 15:09:06', 102, 1);
+(3, 6, 'safasfasf', 4, '2026-02-09 19:12:02', 102, 1);
 
 -- --------------------------------------------------------
 
@@ -177,24 +172,16 @@ INSERT INTO `quiz_attempts` (`id`, `quiz_id`, `student_id`, `score`, `attempt_ti
 (27, 1, 103, 0.00, '2026-01-29 15:08:10', '2026-01-29 15:08:07', '{\"1\":\"programming\"}', 0, 0, 0.00, NULL, 0),
 (28, 1, 103, 0.00, '2026-01-29 15:08:16', '2026-01-29 15:08:16', '{}', 0, 0, 0.00, NULL, 0),
 (29, 1, 103, 100.00, '2026-01-29 15:08:19', '2026-01-29 15:08:16', '{\"1\":\"portion \"}', 0, 0, 0.00, NULL, 0),
-(30, 2, 103, 0.00, '2026-01-29 15:09:26', '2026-01-29 15:09:26', '{}', 0, 0, 0.00, NULL, 0),
-(31, 2, 103, 0.00, '2026-01-29 15:09:31', '2026-01-29 15:09:26', '{\"2\":\"afasf\"}', 0, 0, 0.00, NULL, 0),
-(32, 2, 103, 0.00, '2026-01-29 15:09:37', '2026-01-29 15:09:37', '{}', 0, 0, 0.00, NULL, 0),
-(33, 2, 103, 0.00, '2026-01-29 15:09:39', '2026-01-29 15:09:37', '{\"2\":\"safasf\"}', 0, 0, 0.00, NULL, 0),
-(34, 2, 103, 0.00, '2026-01-29 15:09:46', '2026-01-29 15:09:46', '{}', 0, 0, 0.00, NULL, 0),
-(35, 2, 103, 0.00, '2026-01-29 15:09:48', '2026-01-29 15:09:46', '{\"2\":\"assssfsf\"}', 0, 0, 0.00, NULL, 0),
-(36, 2, 103, 0.00, '2026-01-29 15:09:55', '2026-01-29 15:09:55', '{}', 0, 0, 0.00, NULL, 0),
-(37, 2, 103, 0.00, '2026-01-29 15:09:57', '2026-01-29 15:09:55', '{\"2\":\"safsa\"}', 0, 0, 0.00, NULL, 0),
-(38, 2, 103, 0.00, '2026-01-29 15:28:18', '2026-01-29 15:28:18', '{}', 0, 0, 0.00, NULL, 0),
-(39, 2, 103, 0.00, '2026-01-29 15:28:21', '2026-01-29 15:28:18', '{\"2\":\"afasf\"}', 0, 0, 0.00, NULL, 0),
-(40, 2, 103, 0.00, '2026-01-29 15:28:28', '2026-01-29 15:28:28', '{}', 0, 0, 0.00, NULL, 0),
-(41, 2, 103, 0.00, '2026-01-29 15:44:34', '2026-01-29 15:28:28', '{}', 0, 0, 0.00, NULL, 0),
-(42, 2, 103, 0.00, '2026-01-31 16:56:32', '2026-01-31 16:56:29', '{\"2\":\"safsa\"}', 0, 0, 0.00, NULL, 0),
-(43, 2, 103, 0.00, '2026-01-31 16:56:29', '2026-01-31 16:56:29', '{}', 0, 0, 0.00, NULL, 0),
 (44, 1, 103, 0.00, '2026-02-09 13:28:56', '2026-02-09 13:28:56', '{}', 0, 0, 0.00, NULL, 0),
 (45, 1, 103, 0.00, '2026-02-09 13:28:58', '2026-02-09 13:28:56', '{\"1\":\"programming\"}', 0, 0, 0.00, NULL, 0),
 (46, 1, 103, NULL, '2026-02-09 14:27:18', '2026-02-09 14:27:18', '{}', 0, 1, 0.00, NULL, 0),
-(47, 1, 103, NULL, '2026-02-09 14:27:21', '2026-02-09 14:27:18', '{\"1\":\"programming\"}', 0, 1, 0.00, '2026-02-09 14:27:21', 1);
+(47, 1, 103, NULL, '2026-02-09 14:27:21', '2026-02-09 14:27:18', '{\"1\":\"programming\"}', 0, 1, 0.00, '2026-02-09 14:27:21', 1),
+(48, 3, 103, NULL, '2026-02-09 20:01:03', '2026-02-09 20:00:57', NULL, 2, 2, 100.00, '2026-02-09 20:01:03', 1),
+(49, 3, 103, NULL, '2026-02-09 20:00:57', '2026-02-09 20:00:57', NULL, 0, 2, 0.00, NULL, 0),
+(50, 1, 103, NULL, '2026-02-20 04:00:16', '2026-02-20 04:00:16', NULL, 0, 1, 0.00, NULL, 0),
+(51, 1, 103, NULL, '2026-02-20 04:00:20', '2026-02-20 04:00:16', NULL, 0, 1, 0.00, '2026-02-20 04:00:20', 1),
+(52, 1, 103, NULL, '2026-02-20 04:00:27', '2026-02-20 04:00:27', NULL, 0, 1, 0.00, NULL, 0),
+(53, 1, 103, NULL, '2026-02-20 04:00:30', '2026-02-20 04:00:27', NULL, 1, 1, 100.00, '2026-02-20 04:00:30', 1);
 
 -- --------------------------------------------------------
 
@@ -209,6 +196,16 @@ CREATE TABLE `quiz_attempt_answers` (
   `selected_index` int(11) NOT NULL,
   `is_correct` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `quiz_attempt_answers`
+--
+
+INSERT INTO `quiz_attempt_answers` (`id`, `attempt_id`, `question_id`, `selected_index`, `is_correct`) VALUES
+(1, 48, 4, 3, 1),
+(2, 48, 5, 2, 1),
+(3, 51, 1, 1, 0),
+(4, 53, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -230,7 +227,8 @@ CREATE TABLE `quiz_questions` (
 
 INSERT INTO `quiz_questions` (`id`, `quiz_id`, `question_text`, `options`, `correct_answer`) VALUES
 (1, 1, 'What is p', '[\"portion \",\"programming\",\"paragraph\",\"parent class\"]', 0),
-(2, 2, 'asdasfsafsaf', '[\"safsa\",\"assssfsf\",\"safasf\",\"afasf\"]', 3);
+(4, 3, 'asfasfasf', '[\"safasfas\",\"fasf\",\"sfsf\",\"fffffffffffffffff\"]', 3),
+(5, 3, 'dasfdsfsdg', '[\"dgsdg\",\"sdgsd\",\"gggggggggggggggg\",\"dgdg\"]', 2);
 
 -- --------------------------------------------------------
 
@@ -270,7 +268,8 @@ CREATE TABLE `submissions` (
 --
 
 INSERT INTO `submissions` (`id`, `assignment_id`, `student_id`, `file_url`, `status`, `grade`, `feedback`, `submitted_at`, `teacher_id`) VALUES
-(1, 1, 103, '1767701183333_425891353.pptx', 'graded', 50.00, 'improve the reference', '2026-01-06 12:06:23', 102);
+(1, 1, 103, '1767701183333_425891353.pptx', 'graded', 51.00, 'improve the reference', '2026-01-06 12:06:23', 102),
+(2, 4, 103, '1770664383257_590323367.pdf', 'pending', NULL, NULL, '2026-02-09 19:13:03', 102);
 
 -- --------------------------------------------------------
 
@@ -307,7 +306,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`) VALUES
 (101, 'Admin User', 'admin@example.com', '$2a$10$SIAWAlv3crPBGTCXz2gb/Oa1BBzfTqNSXw.aetkU2qlbtINvNmSRq', 'admin', '2025-12-27 12:24:54'),
-(102, 'Prof. Johnson', 'teacher@example.com', '$2a$10$zdFqi.42jRAJoN72JQsrCucuZMNr.bTrMlprllvFMu2mvX2L.dDMq', 'teacher', '2025-12-27 12:24:54'),
+(102, 'Prof. Johnson', 'teacher@example.com', '$2b$10$uRDN821qcHQfJOkLISSeOeACVtx84Bi1H9sv5gMioCGQQFHHw4Gdq', 'teacher', '2025-12-27 12:24:54'),
 (103, 'Anupam', 'student@elearn.com', '$2a$10$/eb6EVARJFH32OCLS6sHze7EMPJMwZVw5kjXAwUvYvSNBqlkQ5yum', 'student', '2025-12-27 12:24:54');
 
 --
@@ -403,43 +402,43 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `assignments`
 --
 ALTER TABLE `assignments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `enrollments`
 --
 ALTER TABLE `enrollments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `quizzes`
 --
 ALTER TABLE `quizzes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `quiz_attempts`
 --
 ALTER TABLE `quiz_attempts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `quiz_attempt_answers`
 --
 ALTER TABLE `quiz_attempt_answers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
 --
 ALTER TABLE `quiz_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `study_materials`
@@ -451,7 +450,7 @@ ALTER TABLE `study_materials`
 -- AUTO_INCREMENT for table `submissions`
 --
 ALTER TABLE `submissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `system_logs`
@@ -463,7 +462,7 @@ ALTER TABLE `system_logs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- Constraints for dumped tables

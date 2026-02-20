@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const verifyToken = require("../../middleware/authMiddleware");
-const { getMyCourses, getCourseDetail } = require("../../controllers/student/course.controller");
+const { getMyCourses, getCourseDetail,searchCourses } = require("../../controllers/student/course.controller");
 const db = require("../../config/db");
 
 
@@ -15,6 +15,12 @@ function isStudent(req, res, next) {
   }
   next();
 }
+
+
+
+// Public search route
+router.get("/search", searchCourses);
+
 // Student dashboard: list of courses
 router.get("/my-courses", verifyToken, getMyCourses);
 
