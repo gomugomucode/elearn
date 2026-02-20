@@ -36,6 +36,7 @@ import TeacherProfile from "./pages/teacher/Profile";
 import TeacherAssignments from "./pages/teacher/Assignments";
 import TeacherQuizzes from "./pages/teacher/Quizzes";
 import TeacherSubmissions from "./pages/teacher/Submissions";
+import TeacherGradebook from "./pages/teacher/Gradebook";
 import EditCourse from "./pages/teacher/EditCourse";
 
 // Student Pages
@@ -182,6 +183,7 @@ function AppContent() {
         <Route path="assignments" element={<TeacherAssignments />} />
         <Route path="quizzes" element={<TeacherQuizzes />} />
         <Route path="submissions" element={<TeacherSubmissions />} />
+        <Route path="gradebook" element={<TeacherGradebook />} />
         <Route path="profile" element={<TeacherProfile />} />
       </Route>
 

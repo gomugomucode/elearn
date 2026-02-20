@@ -41,6 +41,7 @@ const Sidebar = ({ userRole, userName }) => {
     { name: 'Assignments', path: '/teacher/assignments', icon: ClipboardDocumentListIcon },
     { name: 'Quizzes', path: '/teacher/quizzes', icon: QuestionMarkCircleIcon },
     { name: 'Submissions', path: '/teacher/submissions', icon: InboxIcon },
+    { name: 'Gradebook', path: '/teacher/gradebook', icon: InboxIcon },
     
   ];
       case 'student':

@@ -78,62 +78,62 @@ export default function Assignments() {
                   {new Date(a.due_date).toDateString()}
                 </div>
 
-                {/* NOT SUBMITTED */}
-                {!a.submitted && (
-                  <p className="text-sm text-gray-700">
-                    <FaClock className="inline mr-1" />
-                    {daysLeft >= 0
-                      ? `${daysLeft} days left`
-                      : "Overdue ❌"}
-                  </p>
-                )}
+            {/* NOT SUBMITTED - Use Number() === 0 to be safe */}
+{Number(a.submitted) === 0 && (
+  <p className="text-sm text-gray-700">
+    <FaClock className="inline mr-1" />
+    {daysLeft >= 0 ? `${daysLeft} days left` : "Overdue ❌"}
+  </p>
+)}
 
                 {/* SUBMITTED BUT NOT GRADED */}
-                {a.submitted && a.status !== "graded" && (
-                  <p className="mt-3 text-sm text-orange-600">
-                    ⏳ Awaiting evaluation
-                  </p>
-                )}
-
+                {/* SUBMITTED BUT NOT GRADED */}
+{!!a.submitted && a.status !== "graded" && a.grade === null && (
+  <p className="mt-3 text-sm text-orange-600">
+    ⏳ Awaiting evaluation
+  </p>
+)}
                 {/* GRADED */}
-                {a.status === "graded" && (
-                  <>
-                    <div className="mt-3 bg-green-50 p-3 rounded">
-                      <p className="flex items-center gap-2 font-semibold text-green-700">
-                        <FaStar />
-                        Marks: {a.grade}/100
-                      </p>
-                    </div>
+              {/* Change this in your Assignments.jsx */}
+{a.grade !== null && (
+  <>
+    <div className="mt-3 bg-green-50 p-3 rounded">
+      <p className="flex items-center gap-2 font-semibold text-green-700">
+        <FaStar />
+        Marks: {a.grade}/100
+      </p>
+    </div>
 
-                    {a.feedback && (
-                      <div className="mt-3 bg-gray-50 p-3 rounded">
-                        <p className="flex items-start gap-2 text-sm text-gray-700">
-                          <FaCommentDots className="mt-1" />
-                          {a.feedback}
-                        </p>
-                      </div>
-                    )}
-                  </>
-                )}
+    {a.feedback && (
+      <div className="mt-3 bg-gray-50 p-3 rounded">
+        <p className="flex items-start gap-2 text-sm text-gray-700">
+          <FaCommentDots className="mt-1" />
+          {a.feedback}
+        </p>
+      </div>
+    )}
+  </>
+)}
               </div>
 
-              <div className="px-5 pb-5">
-                {a.submitted ? (
-                  <button
-                    disabled
-                    className="w-full bg-gray-400 text-white py-2 rounded cursor-not-allowed"
-                  >
-                    Submitted
-                  </button>
-                ) : (
-                  <Link
-                    to={`/student/assignments/${a.id}`}
-                    className="block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                  >
-                    Submit Assignment
-                  </Link>
-                )}
-              </div>
+             <div className="px-5 pb-5">
+  {/* Check specifically for 1 because the DB sends a number, not a boolean */}
+  {Number(a.submitted) === 1 ? (
+    <button
+      disabled
+      className="w-full bg-gray-400 text-white py-2 rounded cursor-not-allowed"
+    >
+      Submitted
+    </button>
+  ) : (
+    <Link
+      to={`/student/assignments/${a.id}`}
+      className="block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+    >
+      Submit Assignment
+    </Link>
+  )}
+</div>
             </div>
           );
         })}

@@ -20,19 +20,45 @@ const TeacherSubmissions = () => {
     fetchSubmissions();
   }, []);
 
-  const handleEvaluate = async () => {
-    try {
-      const updated = await gradeTeacherSubmission(selected.id, { grade, feedback });
-      setSubmissions(submissions.map(s => s.id === selected.id ? updated : s));
-      setSelected(null);
-      setGrade('');
-      setFeedback('');
-    } catch (err) {
-      console.error(err);
-      alert('Failed to submit grade.');
-    }
-  };
+  
 
+const handleEvaluate = async () => {
+  // 1. Convert to number for checking
+  const numericGrade = parseFloat(grade);
+
+  // 2. Validation Logic
+  if (grade === '' || isNaN(numericGrade)) {
+    return alert('Please enter a valid numeric grade.');
+  }
+  if (numericGrade < 0 || numericGrade > 100) {
+    return alert('Grade must be between 0 and 100.');
+  }
+  if (feedback.trim().length < 5) {
+    return alert('Please provide at least a short feedback (min 5 characters).');
+  }
+
+  try {
+   // This line in your provided code will now receive the full object 
+// instead of just { message: '...' }
+const updated = await gradeTeacherSubmission(selected.id, { 
+  grade: numericGrade, 
+  feedback: feedback.trim() 
+});
+
+// Because 'updated' now contains 'submitted_at' and 'assignment_title', 
+// your map function keeps the UI data perfect.
+setSubmissions(submissions.map(s => s.id === selected.id ? updated : s));
+    
+    // Reset modal
+    setSelected(null);
+    setGrade('');
+    setFeedback('');
+    alert('Evaluation submitted successfully!');
+  } catch (err) {
+    console.error(err);
+    alert('Failed to submit grade.');
+  }
+};
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this submission?')) return;
     try {

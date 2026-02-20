@@ -35,6 +35,24 @@ app.options("*", cors());
 
 const auth = require("./middleware/authMiddleware");
 
+
+const contactRoutes = require('./routes/contactRoutes');
+// 1. Import the route file
+const gradebookRoutes = require('./routes/teacher/gradebook.routes');
+
+// ... other imports and app initialization
+
+// 2. Register the route with the correct prefix
+// This makes the endpoint available at http://localhost:5000/api/teacher/gradebook
+app.use('/api/teacher/gradebook', gradebookRoutes);
+
+
+
+
+app.use("/api/contact", contactRoutes);
+
+// ... rest of your server code ...
+
 const enrollRoutes =  require("./routes/student/enroll.routes")
 
 app.use("/api/student/enroll", auth, enrollRoutes);

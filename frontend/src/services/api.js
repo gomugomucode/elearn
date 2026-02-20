@@ -432,6 +432,12 @@ export const getTeacherDashboardStats = async () => {
   return handleResponse(res);
 };
 
+// frontend/src/services/api.js
+export const getGradebook = async () => {
+  // Ensure this matches the backend prefix
+  const response = await api.get("/teacher/gradebook"); 
+  return response.data;
+};
 
 
 

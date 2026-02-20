@@ -2,7 +2,6 @@ const events = require('events');
 const JSZip = require('jszip');
 
 const StreamBuf = require('./stream-buf');
-const {stringToBuffer} = require('./browser-buffer-encode');
 
 // =============================================================================
 // The ZipWriter class
@@ -26,11 +25,6 @@ class ZipWriter extends events.EventEmitter {
     if (options.hasOwnProperty('base64') && options.base64) {
       this.zip.file(options.name, data, {base64: true});
     } else {
-      // https://www.npmjs.com/package/process
-      if (process.browser && typeof data === 'string') {
-        // use TextEncoder in browser
-        data = stringToBuffer(data);
-      }
       this.zip.file(options.name, data);
     }
   }
