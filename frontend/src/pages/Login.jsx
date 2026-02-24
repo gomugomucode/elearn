@@ -11,11 +11,37 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  // ---------------- NEW VALIDATION LOGIC ----------------
+  const validateLogin = (email) => {
+    // 1. Basic Email Regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address.";
+    }
+
+    // 2. Block junk/fake patterns like 123@123.com
+    if (email.includes("123@123") || email.split('@')[0].length < 2) {
+      return "This email format is not allowed. Please use your registered email.";
+    }
+
+    return null; // No errors
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    // --- RUN VALIDATION ---
+    const validationError = validateLogin(email);
+    if (validationError) {
+      setError(validationError);
+      return; // Stop here if data is junk
+    }
+
+    // --- PROCEED IF VALID ---
     try {
-      const user = await login(email, password); // Make sure login() RETURNS user object
+      const user = await login(email, password); 
 
       // ✅ Redirect based on role
       if (user.role === 'admin') {
@@ -28,6 +54,7 @@ const Login = () => {
         navigate('/login'); // fallback
       }
     } catch (err) {
+      // Catch backend errors (Wrong password, User not found, etc.)
       setError(err.message || 'Login failed');
     }
   };
@@ -38,7 +65,8 @@ const Login = () => {
         <h2>Welcome Back</h2>
         <p>Admin-managed accounts only</p>
 
-        {error && <div className="error">{error}</div>}
+        {/* Display Validation or Server Errors */}
+        {error && <div className="error" style={{ color: 'red', marginBottom: '10px', fontSize: '14px' }}>{error}</div>}
 
         <input
           type="email"

@@ -13,11 +13,32 @@ const ManageUsers = () => {
   const [teachers, setTeachers] = useState([]);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [formError, setFormError] = useState(""); // State for validation errors
 
   // Bulk upload states
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [uploadErrors, setUploadErrors] = useState(null);
+
+  // ---------------- NEW VALIDATION LOGIC ----------------
+  const validateUserData = (name, email) => {
+    const trimmedName = name.trim();
+    // Blocks names like ".", "..", "..."
+    const isDotsOnly = /^[\.]+$/.test(trimmedName);
+    // Standard email format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (isDotsOnly || trimmedName.length < 2) {
+      return "Please enter a valid name (at least 2 characters, no just dots).";
+    }
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address.";
+    }
+    if (email.includes("123@123") || email.split('@')[0].length < 2) {
+      return "The email '123@123.com' or similar short patterns are not allowed.";
+    }
+    return null; // No errors
+  };
 
   const safeArray = (data, key) => {
     if (!data) return [];
@@ -88,15 +109,24 @@ Jane Smith,jane@example.com,pass123,teacher`;
     }
   };
 
-  // ---------------- Add User ----------------
+  // ---------------- Add User (With Validation) ----------------
   const handleAddUser = async (e) => {
     e.preventDefault();
+    setFormError(""); // Reset error
     const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+
+    const errorMsg = validateUserData(name, email);
+    if (errorMsg) {
+      setFormError(errorMsg);
+      return;
+    }
 
     try {
       await createAdminUser({
-        name: form.name.value,
-        email: form.email.value,
+        name,
+        email,
         password: form.password.value,
         role: form.role.value
       });
@@ -106,24 +136,33 @@ Jane Smith,jane@example.com,pass123,teacher`;
       fetchUsers();
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || "Error creating user");
+      setFormError(err?.response?.data?.message || "Error creating user");
     }
-
   };
 
-  // ---------------- Edit User ----------------
+  // ---------------- Edit User (With Validation) ----------------
   const handleEditUser = (user) => {
+    setFormError("");
     setEditUser(user);
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    setFormError("");
     const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+
+    const errorMsg = validateUserData(name, email);
+    if (errorMsg) {
+      setFormError(errorMsg);
+      return;
+    }
 
     try {
       await updateAdminUser(editUser.id, {
-        name: form.name.value,
-        email: form.email.value,
+        name,
+        email,
         password: form.password.value || undefined,
         role: form.role.value,
       });
@@ -133,7 +172,7 @@ Jane Smith,jane@example.com,pass123,teacher`;
       fetchUsers();
     } catch (err) {
       console.error(err);
-      alert("Failed to update user");
+      setFormError("Failed to update user");
     }
   };
 
@@ -178,7 +217,7 @@ Jane Smith,jane@example.com,pass123,teacher`;
           </label>
 
           <button
-            onClick={() => setShowAddModal(true)}
+            onClick={() => { setFormError(""); setShowAddModal(true); }}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
           >
             Add User
@@ -204,7 +243,7 @@ Jane Smith,jane@example.com,pass123,teacher`;
         />
       )}
 
-      {/* Users Tables */}
+      {/* Users Tables - RESTORED WITH YOUR ORIGINAL COLUMNS */}
       <UserTable
         title="Teachers"
         users={teachers}
@@ -224,11 +263,16 @@ Jane Smith,jane@example.com,pass123,teacher`;
       />
 
       {showAddModal && (
-        <AddUserModal onClose={() => setShowAddModal(false)} onSubmit={handleAddUser} />
+        <AddUserModal 
+          error={formError} 
+          onClose={() => setShowAddModal(false)} 
+          onSubmit={handleAddUser} 
+        />
       )}
 
       {editUser && (
         <EditUserModal
+          error={formError}
           user={editUser}
           onClose={() => setEditUser(null)}
           onSubmit={handleEditSubmit}
@@ -240,7 +284,7 @@ Jane Smith,jane@example.com,pass123,teacher`;
 
 export default ManageUsers;
 
-// ---------------- TABLE ----------------
+// ---------------- TABLE (FULL VERSION) ----------------
 const UserTable = ({ title, users, handleEdit, handleDelete, extraColumns = [], mapExtra = () => [] }) => (
   <div className="bg-white p-6 rounded-lg shadow mb-8">
     <h3 className="text-xl font-semibold mb-4">{title}</h3>
@@ -248,11 +292,11 @@ const UserTable = ({ title, users, handleEdit, handleDelete, extraColumns = [], 
     <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-50">
         <tr>
-          <th className="px-6 py-3">Name</th>
-          <th className="px-6 py-3">Email</th>
-          <th className="px-6 py-3">Role</th>
-          {extraColumns.map(col => <th key={col} className="px-6 py-3">{col}</th>)}
-          <th className="px-6 py-3">Actions</th>
+          <th className="px-6 py-3 text-left">Name</th>
+          <th className="px-6 py-3 text-left">Email</th>
+          <th className="px-6 py-3 text-left">Role</th>
+          {extraColumns.map(col => <th key={col} className="px-6 py-3 text-left">{col}</th>)}
+          <th className="px-6 py-3 text-left">Actions</th>
         </tr>
       </thead>
 
@@ -282,11 +326,14 @@ const UserTable = ({ title, users, handleEdit, handleDelete, extraColumns = [], 
   </div>
 );
 
-// ---------------- ADD USER MODAL ----------------
-const AddUserModal = ({ onClose, onSubmit }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+// ---------------- ADD USER MODAL (FULL VERSION) ----------------
+const AddUserModal = ({ onClose, onSubmit, error }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white p-6 rounded-lg w-full max-w-md">
       <h3 className="text-lg font-bold mb-4">Add User</h3>
+      
+      {/* Error Display */}
+      {error && <div className="text-red-500 text-sm mb-3 font-bold">{error}</div>}
 
       <form onSubmit={onSubmit}>
         <input className="border w-full p-2 mb-3" name="name" placeholder="Name" required />
@@ -306,11 +353,14 @@ const AddUserModal = ({ onClose, onSubmit }) => (
   </div>
 );
 
-// ---------------- EDIT USER MODAL ----------------
-const EditUserModal = ({ user, onClose, onSubmit }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+// ---------------- EDIT USER MODAL (FULL VERSION) ----------------
+const EditUserModal = ({ user, onClose, onSubmit, error }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white p-6 rounded-lg w-full max-w-md">
       <h3 className="text-lg font-bold mb-4">Edit User</h3>
+
+      {/* Error Display */}
+      {error && <div className="text-red-500 text-sm mb-3 font-bold">{error}</div>}
 
       <form onSubmit={onSubmit}>
         <input className="border w-full p-2 mb-3" name="name" defaultValue={user.name} placeholder="Name" required />
@@ -332,7 +382,7 @@ const EditUserModal = ({ user, onClose, onSubmit }) => (
 
 // ---------------- ERROR REPORT MODAL ----------------
 const ErrorReportModal = ({ errors, onClose }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white p-6 rounded-lg w-full max-w-xl">
       <h3 className="text-lg font-bold mb-4">Upload Errors</h3>
 
